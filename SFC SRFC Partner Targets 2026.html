@@ -1,0 +1,904 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>2026 Partnership Scenario Planning – Sounders & Reign</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #060b1c;
+      --accent: #16a34a;
+      --accent-soft: rgba(22, 163, 74, 0.18);
+      --accent-alt: #22c55e;
+      --accent-reign: #7c3aed;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 0 0, #111827 0, #030712 50%);
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 1000px;
+    }
+
+    .shell {
+      border-radius: 26px;
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 22px;
+    }
+
+    .tab-bar {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4b5563;
+    }
+
+    .tab.active {
+      background: rgba(15, 23, 42, 0.98);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6);
+    }
+
+    .tab.active span.dot.sounders {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+    .tab.active span.dot.reign {
+      background: var(--accent-reign);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.35);
+    }
+
+    .panel {
+      display: none;
+      margin-top: 8px;
+    }
+    .panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .panel-kicker {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill .mini-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .layout-row {
+      display: grid;
+      grid-template-columns: minmax(1, 1.4fr) minmax(1, 1.2fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 980px) {
+      .layout-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 12px 12px 14px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    .badge.green {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+    }
+    .badge.purple {
+      border-color: rgba(129, 140, 248, 0.7);
+      color: #e0e7ff;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .summary-card {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), #020617 55%);
+      padding: 8px 10px 10px;
+      font-size: 12px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .summary-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-inner {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(to right, #22c55e, #a3e635);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+
+    .progress-inner.purple {
+      background: linear-gradient(to right, #7c3aed, #f97316);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 6px 6px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      background: rgba(15, 23, 42, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .cat-name {
+      font-weight: 500;
+    }
+
+    .cat-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .num-input {
+      width: 80px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .num-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+    }
+
+    .metric-input {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .metric-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .milestones {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .milestones table {
+      font-size: 11px;
+    }
+
+    .milestones input[type="date"],
+    .milestones input[type="text"] {
+      width: 100%;
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+    }
+
+    .milestones input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .examples {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .examples ul {
+      padding-left: 18px;
+      margin: 4px 0;
+    }
+
+    .examples li {
+      margin-bottom: 3px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="subtitle">
+      Adjust revenue targets, success criteria, and key milestones for
+      <strong>Seattle Sounders FC</strong> and <strong>Seattle Reign FC</strong>.
+      Use this board as a live planning tool for 2026 MLS &amp; NWSL seasons and FIFA World Cup legacy.
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="tab-bar">
+      <button class="tab active" data-club="sounders">
+        <span class="dot sounders"></span> Seattle Sounders FC
+      </button>
+      <button class="tab" data-club="reign">
+        <span class="dot reign"></span> Seattle Reign FC
+      </button>
+    </div>
+
+    <!-- SOUNDERS PANEL -->
+    <section id="sounders-panel" class="panel active">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Seattle Sounders FC &mdash; 2026 Partnership Targets</div>
+          <div class="panel-kicker">
+            Targeting top-decile MLS commercial performance, World Cup 26 legacy, and RAVE 26 MORE by 2026.
+          </div>
+          <div class="pill-row">
+            <div class="pill"><span class="mini-dot"></span> 2024 baseline &rarr; 2026 target &amp; stretch</div>
+            <div class="pill"><span class="mini-dot"></span> Units in US$ millions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <!-- LEFT: Revenue scenario -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Revenue Scenarios &amp; Category Mix</div>
+            <div class="badge green">Sounders &mdash; Scenario Builder</div>
+          </div>
+
+          <div id="sounders-summary" class="summary-grid"></div>
+
+          <div class="hint">
+            Adjust targets by category below. Totals and growth rates update automatically.
+          </div>
+
+          <div style="max-height: 260px; overflow-y: auto; margin-top: 6px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Category</th>
+                  <th>Baseline 2024<br>(M$)</th>
+                  <th>Target 2026<br>(M$)</th>
+                  <th>Stretch 2026<br>(M$)</th>
+                </tr>
+              </thead>
+              <tbody id="sounders-categories"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT: Success criteria & milestones -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Success Criteria &amp; Key Milestones</div>
+            <div class="badge">Customize for planning workshops</div>
+          </div>
+
+          <div id="sounders-metrics"></div>
+
+          <div class="milestones">
+            <div style="font-weight: 500; margin-bottom: 4px;">Key 2025&ndash;26 Milestones</div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 30%;">Target Date</th>
+                  <th>Milestone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="date" value="2025-12-31" /></td>
+                  <td><input type="text" value="Lock primary 2026 jersey & World Cup-era naming rights deals" /></td>
+                </tr>
+                <tr>
+                  <td><input type="date" value="2026-07-15" /></td>
+                  <td><input type="text" value="Leverage Seattle World Cup matches with at least 3 global campaign launches" /></td>
+                </tr>
+                <tr>
+                  <td><input type="date" value="2026-12-15" /></td>
+                  <td><input type="text" value="Hit 52 RAVE fields &amp; evaluate 2026 partnership scorecards for all top 20 partners" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="examples">
+            <div style="font-weight: 500; margin-top: 6px;">Benchmarks &amp; Examples (Sounders POV)</div>
+            <ul>
+              <li>Top-5 MLS club in partnership revenue and jersey/media exposure value.</li>
+              <li>3&ndash;5 new strategic partners in white-space categories (AI/data, outdoor/climate, co-ops, fintech).</li>
+              <li>RAVE delivers at least 52 fields, 100k balls, and 23k+ kids reached annually by end of 2026.</li>
+              <li>School-based mental-health programs expanded to 3+ districts with tens of thousands of students eligible.</li>
+              <li>At least one industry-recognized case study or award for a best-in-class partnership or community activation.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REIGN PANEL -->
+    <section id="reign-panel" class="panel">
+      <div class="panel-header">
+        <div>
+          <div class="panel-title">Seattle Reign FC &mdash; 2026 Partnership Targets</div>
+          <div class="panel-kicker">
+            Targeting upper-quartile NWSL partnership performance and integrated women&#8217;s football impact.
+          </div>
+          <div class="pill-row">
+            <div class="pill"><span class="mini-dot"></span> 2024 baseline &rarr; 2026 target &amp; stretch</div>
+            <div class="pill"><span class="mini-dot"></span> Units in US$ millions</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <!-- LEFT: Revenue scenario -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Revenue Scenarios &amp; Category Mix</div>
+            <div class="badge purple">Reign &mdash; Scenario Builder</div>
+          </div>
+
+          <div id="reign-summary" class="summary-grid"></div>
+
+          <div class="hint">
+            Adjust targets by category below. Totals and growth rates update automatically.
+          </div>
+
+          <div style="max-height: 260px; overflow-y: auto; margin-top: 6px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Category</th>
+                  <th>Baseline 2024<br>(M$)</th>
+                  <th>Target 2026<br>(M$)</th>
+                  <th>Stretch 2026<br>(M$)</th>
+                </tr>
+              </thead>
+              <tbody id="reign-categories"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- RIGHT: Success criteria & milestones -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Success Criteria &amp; Key Milestones</div>
+            <div class="badge">Customize for planning workshops</div>
+          </div>
+
+          <div id="reign-metrics"></div>
+
+          <div class="milestones">
+            <div style="font-weight: 500; margin-bottom: 4px;">Key 2025&ndash;26 Milestones</div>
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 30%;">Target Date</th>
+                  <th>Milestone</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="date" value="2025-12-31" /></td>
+                  <td><input type="text" value="Secure multi-year expansions with Trupanion and key health &amp; equity partners" /></td>
+                </tr>
+                <tr>
+                  <td><input type="date" value="2026-04-01" /></td>
+                  <td><input type="text" value="Launch flagship girls-in-sport and equity initiative with measurable outcomes" /></td>
+                </tr>
+                <tr>
+                  <td><input type="date" value="2026-11-30" /></td>
+                  <td><input type="text" value="Achieve top-4 NWSL ranking in jersey social value &amp; complete 2026 partner scorecards" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="examples">
+            <div style="font-weight: 500; margin-top: 6px;">Benchmarks &amp; Examples (Reign POV)</div>
+            <ul>
+              <li>US$7&ndash;8M in partnership revenue, placing Reign in the top quartile of NWSL clubs.</li>
+              <li>Trupanion front-of-kit among top NWSL jerseys in social value, with $3M+ equivalent media value.</li>
+              <li>Reign integrated into every RAVE field opening, co-leading girls &amp; women programming.</li>
+              <li>One flagship equity initiative (e.g., Black-led fund, girls retention in sport, or STEM x soccer academy) with clear metrics.</li>
+              <li>Shared case studies with Sounders showing a unified Seattle women&#8217;s &amp; men&#8217;s football commercial platform.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // -------------------------------
+    // Scenario data configuration
+    // -------------------------------
+    const scenarioData = {
+      sounders: {
+        displayName: "Seattle Sounders FC",
+        currency: "USD",
+        baselineTotal: 24,      // 2024 estimated baseline, in millions
+        targetTotalHint: 33.5,  // mid-point of 32–35M range
+        stretchTotalHint: 36,
+        categories: [
+          {
+            id: "monetary",
+            name: "Monetary Partnerships",
+            baseline: 17,
+            target: 23,
+            stretch: 25,
+            description: "Front-of-kit & training kit, secondary kits, facility naming rights, and content-rights fees."
+          },
+          {
+            id: "brand",
+            name: "Brand & Strategic Alignments",
+            baseline: 3.5,
+            target: 5.5,
+            stretch: 6.5,
+            description: "Tech/AI, finance, outdoor/climate, and member-owned co-op platforms with cash + in-kind value."
+          },
+          {
+            id: "activation",
+            name: "Marketing & Fan Activations",
+            baseline: 2,
+            target: 3.2,
+            stretch: 3.8,
+            description: "Branded matchdays, concourse zones, digital content franchises, and hospitality entitlements."
+          },
+          {
+            id: "civic",
+            name: "Civic & Community Impact (RAVE)",
+            baseline: 1.5,
+            target: 2.8,
+            stretch: 3.2,
+            description: "Partner-funded fields, balls, youth programs, and mental-health initiatives supporting RAVE."
+          }
+        ],
+        metrics: [
+          {
+            id: "renewalRate",
+            label: "Top 20 partner renewal rate target (%)",
+            defaultValue: 90
+          },
+          {
+            id: "newStrategicPartners",
+            label: "# of new strategic partners in white-space categories",
+            defaultValue: 4
+          },
+          {
+            id: "raveFields",
+            label: "# of RAVE fields in network by end of 2026",
+            defaultValue: 52
+          },
+          {
+            id: "youthReached",
+            label: "# of youth reached annually through RAVE programs",
+            defaultValue: 23000
+          },
+          {
+            id: "mentalHealthDistricts",
+            label: "# of school districts with mental-health programs",
+            defaultValue: 3
+          }
+        ]
+      },
+      reign: {
+        displayName: "Seattle Reign FC",
+        currency: "USD",
+        baselineTotal: 5,
+        targetTotalHint: 7.5,  // mid-point of 7–8M range
+        stretchTotalHint: 9,
+        categories: [
+          {
+            id: "monetary",
+            name: "Monetary Partnerships",
+            baseline: 3.5,
+            target: 5.2,
+            stretch: 6,
+            description: "Front-of-kit (Trupanion), back & sleeve sponsors, stadium & training inventory."
+          },
+          {
+            id: "brand",
+            name: "Brand & Strategic Alignments",
+            baseline: 0.8,
+            target: 1.2,
+            stretch: 1.4,
+            description: "Pet, health, equity and tech partners using Reign to tell deeper brand and purpose stories."
+          },
+          {
+            id: "activation",
+            name: "Marketing & Fan Activations",
+            baseline: 0.4,
+            target: 0.8,
+            stretch: 1,
+            description: "NWSL matchday activations, digital series, and cross-club experiences with Sounders & RAVE."
+          },
+          {
+            id: "civic",
+            name: "Civic & Community Impact",
+            baseline: 0.3,
+            target: 0.6,
+            stretch: 0.8,
+            description: "Girls & women’s programs, Title IX storytelling, and joint Reign/Sounders field projects."
+          }
+        ],
+        metrics: [
+          {
+            id: "renewalRate",
+            label: "Partner renewal rate target (%)",
+            defaultValue: 88
+          },
+          {
+            id: "newStrategicPartners",
+            label: "# of new strategic partners (women’s football focus)",
+            defaultValue: 3
+          },
+          {
+            id: "jerseyRank",
+            label: "Target jersey social value ranking (league position)",
+            defaultValue: "Top 4–5 in NWSL"
+          },
+          {
+            id: "equityPrograms",
+            label: "# of flagship girls & equity programs with clear metrics",
+            defaultValue: 2
+          },
+          {
+            id: "jointCaseStudies",
+            label: "# of joint Sounders/Reign partnership case studies",
+            defaultValue: 2
+          }
+        ]
+      }
+    };
+
+    // -------------------------------
+    // Helper functions
+    // -------------------------------
+    function formatMillions(n) {
+      if (isNaN(n)) return "–";
+      return "$" + n.toFixed(1) + "M";
+    }
+
+    function calcTotals(clubKey) {
+      const cfg = scenarioData[clubKey];
+      let baseline = 0,
+          target = 0,
+          stretch = 0;
+      cfg.categories.forEach(cat => {
+        baseline += Number(cat.baseline) || 0;
+        target += Number(cat.target) || 0;
+        stretch += Number(cat.stretch) || 0;
+      });
+      return { baseline, target, stretch };
+    }
+
+    function buildSummary(clubKey) {
+      const summaryEl = document.getElementById(`${clubKey}-summary`);
+      const totals = calcTotals(clubKey);
+      const cfg = scenarioData[clubKey];
+      const baselineTotal = totals.baseline;
+      const targetTotal = totals.target;
+      const stretchTotal = totals.stretch;
+
+      const targetGrowth = baselineTotal ? ((targetTotal - baselineTotal) / baselineTotal) * 100 : 0;
+      const stretchGrowth = baselineTotal ? ((stretchTotal - baselineTotal) / baselineTotal) * 100 : 0;
+
+      const isReign = clubKey === "reign";
+
+      summaryEl.innerHTML = `
+        <div class="summary-card">
+          <div class="summary-label">Baseline (2024 est.)</div>
+          <div class="summary-value">${formatMillions(baselineTotal)}</div>
+          <div class="summary-subtext">
+            Reference point only. Adjust per latest actuals.
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner ${isReign ? "purple" : ""}" style="width: 25%;"></div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Target Scenario (2026)</div>
+          <div class="summary-value">${formatMillions(targetTotal)}</div>
+          <div class="summary-subtext">
+            Growth vs baseline: ${targetGrowth.toFixed(1)}%
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner ${isReign ? "purple" : ""}" style="width: ${Math.min(100, (targetTotal / (cfg.targetTotalHint || targetTotal)) * 100)}%;"></div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Stretch Scenario (2026)</div>
+          <div class="summary-value">${formatMillions(stretchTotal)}</div>
+          <div class="summary-subtext">
+            Growth vs baseline: ${stretchGrowth.toFixed(1)}%
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner ${isReign ? "purple" : ""}" style="width: ${Math.min(100, (stretchTotal / (cfg.stretchTotalHint || stretchTotal)) * 100)}%;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function buildCategoryTable(clubKey) {
+      const tbody = document.getElementById(`${clubKey}-categories`);
+      const cfg = scenarioData[clubKey];
+      tbody.innerHTML = "";
+      cfg.categories.forEach(cat => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>
+            <div class="cat-name">${cat.name}</div>
+            <div class="cat-desc">${cat.description}</div>
+          </td>
+          <td>${formatMillions(cat.baseline)}</td>
+          <td>
+            <input 
+              type="number" step="0.1" min="0" 
+              class="num-input"
+              value="${cat.target}"
+              data-club="${clubKey}"
+              data-cat="${cat.id}"
+              data-scenario="target"
+            />
+          </td>
+          <td>
+            <input 
+              type="number" step="0.1" min="0" 
+              class="num-input"
+              value="${cat.stretch}"
+              data-club="${clubKey}"
+              data-cat="${cat.id}"
+              data-scenario="stretch"
+            />
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Attach listeners
+      tbody.querySelectorAll("input.num-input").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const club = e.target.dataset.club;
+          const catId = e.target.dataset.cat;
+          const scenario = e.target.dataset.scenario;
+          const value = parseFloat(e.target.value);
+          const c = scenarioData[club].categories.find(x => x.id === catId);
+          if (c && !Number.isNaN(value)) {
+            c[scenario] = value;
+          }
+          buildSummary(club);
+        });
+      });
+    }
+
+    function buildMetrics(clubKey) {
+      const container = document.getElementById(`${clubKey}-metrics`);
+      const cfg = scenarioData[clubKey];
+      container.innerHTML = "";
+      cfg.metrics.forEach(m => {
+        const row = document.createElement("div");
+        row.className = "metric-row";
+        row.innerHTML = `
+          <div class="metric-label">${m.label}</div>
+          <div><input class="metric-input" value="${m.defaultValue}" /></div>
+        `;
+        container.appendChild(row);
+      });
+      const hint = document.createElement("div");
+      hint.className = "hint";
+      hint.textContent = "Adjust these fields to define what success looks like from both club and partner perspectives.";
+      container.appendChild(hint);
+    }
+
+    function initClub(clubKey) {
+      buildSummary(clubKey);
+      buildCategoryTable(clubKey);
+      buildMetrics(clubKey);
+    }
+
+    function switchTab(clubKey) {
+      document.querySelectorAll(".tab").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.club === clubKey);
+      });
+      document.querySelectorAll(".panel").forEach(panel => {
+        panel.classList.remove("active");
+      });
+      const panelEl = document.getElementById(`${clubKey}-panel`);
+      if (panelEl) panelEl.classList.add("active");
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Initialize clubs
+      initClub("sounders");
+      initClub("reign");
+
+      // Tab switching
+      document.querySelectorAll(".tab").forEach(btn => {
+        btn.addEventListener("click", () => {
+          switchTab(btn.dataset.club);
+        });
+      });
+    });
+  </script>
+</body>
+</html>

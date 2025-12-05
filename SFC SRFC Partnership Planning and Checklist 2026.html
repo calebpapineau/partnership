@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Partnership Deal Design Matrix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #020617;
+      --bg-elevated: #020617;
+      --accent: #16a34a;
+      --accent-soft: rgba(22, 163, 74, 0.2);
+      --accent-alt: #7c3aed;
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 18px 18px 28px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 0 0, #0f172a 0, #020617 55%);
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 1040px;
+    }
+
+    .shell {
+      border-radius: 26px;
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 20px;
+    }
+
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      margin-bottom: 14px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #4b5563;
+    }
+
+    .tab.active {
+      background: rgba(15, 23, 42, 0.98);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6);
+    }
+
+    .tab.active span.dot {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .tab-panel {
+      display: none;
+      margin-top: 4px;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .panel-kicker {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .pill {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill .mini-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .layout-row {
+      display: grid;
+      grid-template-columns: minmax(1, 1.2fr) minmax(1, 1.1fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 980px) {
+      .layout-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 12px 12px 14px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    .badge.green {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+    }
+
+    .badge.purple {
+      border-color: rgba(129, 140, 248, 0.7);
+      color: #e0e7ff;
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 8px;
+      margin-top: 4px;
+      font-size: 12px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .field label {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .field input,
+    .field select,
+    .field textarea {
+      padding: 4px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-main);
+      font-size: 12px;
+    }
+
+    .field textarea {
+      min-height: 52px;
+      resize: vertical;
+    }
+
+    .field input:focus,
+    .field select:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .summary-card {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), #020617 55%);
+      padding: 8px 10px 10px;
+      font-size: 12px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .summary-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-inner {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(to right, #22c55e, #a3e635);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 12px;
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 6px 6px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      background: rgba(15, 23, 42, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .num-input {
+      width: 90px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .num-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr 0.7fr 1fr;
+      gap: 5px;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 11px;
+    }
+
+    .metric-row input,
+    .metric-row select {
+      width: 100%;
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.95);
+      background: rgba(15, 23, 42, 0.92);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .metric-row input:focus,
+    .metric-row select:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .checklist-table td {
+      font-size: 11px;
+    }
+
+    .checklist-label {
+      font-weight: 500;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 50px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 10px;
+      color: #e5e7eb;
+      cursor: pointer;
+    }
+
+    .chip.standard {
+      border-color: rgba(34, 197, 94, 0.7);
+    }
+
+    .chip.negotiated {
+      border-color: rgba(248, 250, 252, 0.7);
+    }
+
+    .chip.active {
+      background: rgba(34, 197, 94, 0.2);
+    }
+
+    .small-note-input {
+      width: 100%;
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .small-note-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--text-muted);
+      margin-top: 6px;
+      margin-bottom: 2px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Planning Board</h1>
+    <div class="subtitle">
+      Use this internal planning board to design and compare partnership deals across your taxonomy.
+      Each tab focuses on a different element: commercial value, rights &amp; IP, activation inventory,
+      measurement, and the core term sheet checklist.
+    </div>
+  </header>
+
+  <div class="shell">
+    <div class="tab-bar">
+      <button class="tab active" data-tab="overview">
+        <span class="dot"></span> Deal Overview
+      </button>
+      <button class="tab" data-tab="budget">
+        <span class="dot"></span> Budget &amp; Pricing
+      </button>
+      <button class="tab" data-tab="rights">
+        <span class="dot"></span> Rights &amp; IP
+      </button>
+      <button class="tab" data-tab="assets">
+        <span class="dot"></span> Assets &amp; Activations
+      </button>
+      <button class="tab" data-tab="metrics">
+        <span class="dot"></span> Measurement &amp; Outcomes
+      </button>
+      <button class="tab" data-tab="checklist">
+        <span class="dot"></span> Term Sheet Checklist
+      </button>
+    </div>
+
+    <!-- OVERVIEW -->
+    <section id="overview" class="tab-panel active">
+      <div class="panel-header">
+        <div class="panel-title">Deal Overview &amp; Context</div>
+        <div class="panel-kicker">
+          Define the basics: who, what, where, why, and how this partnership fits into the broader strategy
+          (Sounders, Reign, or combined).
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Deal Snapshot</div>
+            <div class="badge green">Start here</div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Partner Name</label>
+              <input type="text" placeholder="e.g., REI Co-op" />
+            </div>
+            <div class="field">
+              <label>Club(s)</label>
+              <select>
+                <option>Seattle Sounders FC</option>
+                <option>Seattle Reign FC</option>
+                <option>Both (Integrated)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Partnership Type (taxonomy)</label>
+              <select>
+                <option>Monetary &mdash; Kit / Facility / Premium</option>
+                <option>Brand &amp; Strategic Alignment</option>
+                <option>Marketing &amp; Fan Activations</option>
+                <option>Civic &amp; Community Impact</option>
+                <option>Hybrid / Multi-vertical</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Primary Category</label>
+              <input type="text" placeholder="e.g., Outdoor / Climate, Fintech, Health" />
+            </div>
+            <div class="field">
+              <label>Deal Term (years)</label>
+              <input type="number" min="1" value="3" />
+            </div>
+            <div class="field">
+              <label>Seasons Covered</label>
+              <input type="text" placeholder="e.g., 2024&ndash;2026" />
+            </div>
+            <div class="field">
+              <label>Geography / Territory</label>
+              <input type="text" placeholder="e.g., Global, U.S., Pacific Northwest" />
+            </div>
+            <div class="field">
+              <label>Internal Owner</label>
+              <input type="text" placeholder="e.g., VP Partnerships, Account Director" />
+            </div>
+          </div>
+
+          <div class="section-label">Strategic Fit</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Strategic Role for Club</label>
+              <textarea placeholder="e.g., Anchor AI/innovation partner, or primary climate/outdoor brand lens."></textarea>
+            </div>
+            <div class="field">
+              <label>Strategic Role for Partner</label>
+              <textarea placeholder="e.g., Pacific Northwest flagship, national brand storytelling via soccer, recruitment platform."></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Deal Stage &amp; Risk Flags</div>
+            <div class="badge">Optional pre-read</div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Pipeline Stage</label>
+              <select>
+                <option>Prospecting</option>
+                <option>Qualified / Discovery</option>
+                <option>Proposal / Solutioning</option>
+                <option>Negotiation</option>
+                <option>Verbal Agreement</option>
+                <option>Signed</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Target Close Date</label>
+              <input type="date" />
+            </div>
+            <div class="field">
+              <label>Internal Priority</label>
+              <select>
+                <option>Anchor / Transformational</option>
+                <option>Strategic Growth</option>
+                <option>Experimental / Innovation</option>
+                <option>Defensive / Category Hold</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Risk Level</label>
+              <select>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="section-label">Key Questions</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>What problem are we solving for the partner?</label>
+              <textarea placeholder="e.g., Need to show climate leadership, drive member growth, or enter a new demographic."></textarea>
+            </div>
+            <div class="field">
+              <label>What problem are we solving for the club?</label>
+              <textarea placeholder="e.g., New white-space category, World Cup legacy, women’s game uplift."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- BUDGET & PRICING -->
+    <section id="budget" class="tab-panel">
+      <div class="panel-header">
+        <div class="panel-title">Budget &amp; Pricing Architecture</div>
+        <div class="panel-kicker">
+          Define the commercial spine of the deal: cash, in-kind, bonuses, and community allocations.
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Value Summary</div>
+            <div class="badge green">Auto-calculated</div>
+          </div>
+          <div id="value-summary" class="summary-grid"></div>
+          <div class="hint">
+            All values are annual in <strong>US$ millions</strong>. Adjust component values below to see totals
+            and community allocation automatically update.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Deal Value Components (Annual)</div>
+            <div class="badge">Editable</div>
+          </div>
+
+          <div style="max-height: 260px; overflow-y: auto; margin-top: 4px;">
+            <table id="budget-table">
+              <thead>
+                <tr>
+                  <th style="width: 28%;">Component</th>
+                  <th>Budgeted Value<br>(M$ / year)</th>
+                  <th>Club Notes</th>
+                  <th>Partner Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-component="cash">
+                  <td>Cash Rights Fee</td>
+                  <td><input class="num-input value-input" type="number" step="0.1" value="5.0" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Front-of-kit + LEDs + digital" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Budgeted as brand spend, national focus" /></td>
+                </tr>
+                <tr data-component="inkind">
+                  <td>In-Kind Value (services, tech, media)</td>
+                  <td><input class="num-input value-input" type="number" step="0.1" value="1.5" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Software licenses, medical services" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Internal cost basis vs rate card" /></td>
+                </tr>
+                <tr data-component="bonus">
+                  <td>Performance Bonuses / Variables</td>
+                  <td><input class="num-input value-input" type="number" step="0.1" value="0.5" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Trophy bonuses, WC26 triggers" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Marketing reserve for success triggers" /></td>
+                </tr>
+                <tr data-component="community">
+                  <td>Community / Impact Allocation</td>
+                  <td><input class="num-input value-input" type="number" step="0.1" value="0.7" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., RAVE fields, mental health, equity" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., ESG &amp; CSR budget line" /></td>
+                </tr>
+                <tr data-component="other">
+                  <td>Other Value (IP, shared revenue, etc.)</td>
+                  <td><input class="num-input value-input" type="number" step="0.1" value="0.3" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Revenue share, licensing" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="e.g., Internal valuation of rights" /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="hint">
+            In a workshop, you can duplicate this file to compare scenarios (e.g., Sounders vs Reign, or different
+            partners in the same category).
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHTS & IP -->
+    <section id="rights" class="tab-panel">
+      <div class="panel-header">
+        <div class="panel-title">Rights &amp; IP Design</div>
+        <div class="panel-kicker">
+          Capture what the partner can do with club IP, player likenesses, and category ownership.
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Core Rights Package</div>
+            <div class="badge">Negotiation focus</div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Category &amp; Exclusivity</label>
+              <textarea placeholder="Define category (e.g., 'Outdoor Retail Co-op') and any carve-outs or conflicts."></textarea>
+            </div>
+            <div class="field">
+              <label>Territory</label>
+              <textarea placeholder="Global, North America, Pacific Northwest, or specific markets where rights apply."></textarea>
+            </div>
+          </div>
+
+          <div class="section-label">Brand &amp; Content Rights</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Club Marks &amp; Logos</label>
+              <textarea placeholder="E.g., rights to use crest, word marks, kit imagery in paid and owned media."></textarea>
+            </div>
+            <div class="field">
+              <label>Player &amp; Coach Likeness Rights</label>
+              <textarea placeholder="Group rights for squad, any individual rights, # of player appearances, usage rules."></textarea>
+            </div>
+          </div>
+
+          <div class="section-label">Digital &amp; Data Rights</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Digital Integrations</label>
+              <textarea placeholder="E.g., club app modules, match center branding, second-screen experiences."></textarea>
+            </div>
+            <div class="field">
+              <label>Data &amp; CRM</label>
+              <textarea placeholder="What data can be shared or used (hashed emails, zero/first-party data, segmented audiences)?"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Rights Risk &amp; Guardrails</div>
+            <div class="badge">Standards &amp; Exceptions</div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label>Morals &amp; Conduct Clauses</label>
+              <textarea placeholder="When can the club or partner exit or suspend rights due to reputational risk?"></textarea>
+            </div>
+            <div class="field">
+              <label>League / City Constraints</label>
+              <textarea placeholder="League category restrictions, city signage rules, advertising codes."></textarea>
+            </div>
+          </div>
+
+          <div class="section-label">Innovation &amp; Co-Developed IP</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Co-Developed Assets / Tools</label>
+              <textarea placeholder="Any jointly developed analytics tools, curricula, or experience IP."></textarea>
+            </div>
+            <div class="field">
+              <label>Ownership &amp; Future Use</label>
+              <textarea placeholder="Who owns what; can the club re-use; can partner deploy beyond club context, etc.?"></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ASSETS & ACTIVATIONS -->
+    <section id="assets" class="tab-panel">
+      <div class="panel-header">
+        <div class="panel-title">Assets &amp; Activations Matrix</div>
+        <div class="panel-kicker">
+          Map which tangible assets and experiences are in the deal and how they support the story.
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Inventory Allocation</div>
+            <div class="badge green">Structure</div>
+          </div>
+          <div style="max-height: 260px; overflow-y: auto; margin-top: 4px;">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 26%;">Asset Group</th>
+                  <th>Included?</th>
+                  <th>Volume / Detail</th>
+                  <th>Purpose / Story Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Kit Inventory</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="Front, sleeve, back, training, academy, etc." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., always-on brand visibility, hero creative platform." /></td>
+                </tr>
+                <tr>
+                  <td>Stadium Signage &amp; LEDs</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="LED minutes, static boards, concourse signage." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., scale reach, brand dominance in key fixtures." /></td>
+                </tr>
+                <tr>
+                  <td>Matchday Activations</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="# of games, footprint, staffing, sampling." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., product trial, education, data capture." /></td>
+                </tr>
+                <tr>
+                  <td>Digital &amp; Social Content</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="Episodes, series names, platforms, formats." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., thought leadership, purpose storytelling." /></td>
+                </tr>
+                <tr>
+                  <td>Hospitality &amp; Premium</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="Suites, club seats, away trips, events." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., B2B acquisition, employee recognition." /></td>
+                </tr>
+                <tr>
+                  <td>Grassroots &amp; Youth Programs</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="Clinics, camps, tournaments, age groups, sites." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., pathway building, community trust." /></td>
+                </tr>
+                <tr>
+                  <td>Civic / RAVE Fields &amp; Impact</td>
+                  <td><input type="checkbox" /></td>
+                  <td><input class="small-note-input" type="text" placeholder="# fields, locations, mental health programs." /></td>
+                  <td><input class="small-note-input" type="text" placeholder="E.g., World Cup legacy, ESG narrative." /></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="hint">
+            This becomes your single-page asset map for internal alignment with Ticketing, Marketing, RAVE and Ops.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Activation Priorities &amp; Risks</div>
+            <div class="badge">Field notes</div>
+          </div>
+
+          <div class="field-grid">
+            <div class="field">
+              <label>Top 3 Must-Win Activations</label>
+              <textarea placeholder="List the hero activations you must get right (e.g., World Cup-themed matchday, community festival, documentary series)."></textarea>
+            </div>
+            <div class="field">
+              <label>Operational &amp; Creative Risks</label>
+              <textarea placeholder="E.g., complexity of build, weather, category sensitivities, staffing, approvals."></textarea>
+            </div>
+          </div>
+
+          <div class="section-label">Internal Dependencies</div>
+          <div class="field-grid">
+            <div class="field">
+              <label>Internal Teams / Stakeholders</label>
+              <textarea placeholder="E.g., Marketing, Community, Soccer Ops, Facilities, Legal, League Office."></textarea>
+            </div>
+            <div class="field">
+              <label>Critical Approvals &amp; Lead Times</label>
+              <textarea placeholder="E.g., kit artwork deadlines, stadium ops sign-off dates, league approvals."></textarea>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- METRICS & OUTCOMES -->
+    <section id="metrics" class="tab-panel">
+      <div class="panel-header">
+        <div class="panel-title">Measurement &amp; Outcomes</div>
+        <div class="panel-kicker">
+          Align on how both the club and the partner will judge success across revenue, brand, and impact.
+        </div>
+      </div>
+
+      <div class="layout-row">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Key Metrics (Club POV)</div>
+            <div class="badge green">Scorecard</div>
+          </div>
+          <div class="hint">
+            Customize the metrics, baselines, and targets for this specific deal.
+          </div>
+          <div style="margin-top: 6px;">
+            <div class="metric-row">
+              <input type="text" value="Annual partnership revenue (M$)" />
+              <input type="text" value="Baseline: 0.0" />
+              <input type="text" value="Target: 2.5" />
+              <input type="text" value="Success: &ge; 2.5M per year" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Top partner renewal rate (%)" />
+              <input type="text" value="Baseline: 85%" />
+              <input type="text" value="Target: 90%+" />
+              <input type="text" value="Success: Renews at upgraded value" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Media & exposure value (M$)" />
+              <input type="text" value="Baseline: 0.0" />
+              <input type="text" value="Target: 1.5" />
+              <input type="text" value="Success: Top-quartile vs peers" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="RAVE / community impact (youth reached)" />
+              <input type="text" value="Baseline: 0" />
+              <input type="text" value="Target: 5,000+" />
+              <input type="text" value="Success: Hit or exceed target" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Portfolio fit (white space vs expansion)" />
+              <input type="text" value="Baseline: N/A" />
+              <input type="text" value="Target: White space" />
+              <input type="text" value="Success: Clears conflicts, adds resilience" />
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Key Metrics (Partner POV)</div>
+            <div class="badge">Co-defined</div>
+          </div>
+          <div class="hint">
+            Capture the partner&#8217;s success lens so your recaps and renewals are mapped to their business case.
+          </div>
+          <div style="margin-top: 6px;">
+            <div class="metric-row">
+              <input type="text" value="Brand awareness / consideration lift" />
+              <input type="text" value="Baseline: from brand tracker" />
+              <input type="text" value="Target: +5&ndash;10 pts" />
+              <input type="text" value="Success: Achieve study target" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="New customers / accounts" />
+              <input type="text" value="Baseline: 0" />
+              <input type="text" value="Target: 5,000+" />
+              <input type="text" value="Success: Meets or beats modeled ROI" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Engagement with activations / content" />
+              <input type="text" value="Baseline: 0" />
+              <input type="text" value="Target: 10M+ impressions" />
+              <input type="text" value="Success: Beats other channels' CPE" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Community / ESG outcomes" />
+              <input type="text" value="Baseline: 0" />
+              <input type="text" value="Target: Defined program KPIs" />
+              <input type="text" value="Success: Meets ESG reporting needs" />
+            </div>
+            <div class="metric-row">
+              <input type="text" value="Internal engagement (employees, partners)" />
+              <input type="text" value="Baseline: N/A" />
+              <input type="text" value="Target: High satisfaction" />
+              <input type="text" value="Success: Reignites internal fandom" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TERM SHEET CHECKLIST -->
+    <section id="checklist" class="tab-panel">
+      <div class="panel-header">
+        <div class="panel-title">Term Sheet Checklist</div>
+        <div class="panel-kicker">
+          Use this as a quick gut-check on what is standard, what is being negotiated, and where you need alignment.
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Deal Components</div>
+          <div class="badge">Standard vs Negotiated</div>
+        </div>
+
+        <div style="max-height: 320px; overflow-y: auto; margin-top: 4px;">
+          <table class="checklist-table">
+            <thead>
+              <tr>
+                <th style="width: 22%;">Component</th>
+                <th>Included</th>
+                <th style="width: 18%;">Status</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td class="checklist-label">Term &amp; Territory</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="term" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="term" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="E.g., 3-year term, global rights with local emphasis." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Category &amp; Exclusivity</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="category" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="category" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Define category boundaries & related league conflicts." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Pricing &amp; Payment Structure</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="pricing" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="pricing" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="E.g., annual payments, escalators, bonuses." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">IP &amp; Player Rights</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="ip" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="ip" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Scope of marks, use in paid media, player likeness limits." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Assets &amp; Activation Rights</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="assets" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="assets" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Inventory list agreed, matchdays, digital, fields, etc." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Measurement &amp; Reporting</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="measurement" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="measurement" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Recap cadence, agreed KPIs, third-party valuation vendor." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Community &amp; Impact Commitments</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="impact" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="impact" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="E.g., % of fee to RAVE, # of fields, program KPIs." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Data &amp; Privacy</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="data" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="data" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Data sharing, CRM segments, compliance constraints." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">Morals, Exit &amp; Remedy</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="morals" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="morals" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="Cause / cure periods, scandal triggers, step-down options." /></td>
+              </tr>
+              <tr>
+                <td class="checklist-label">League / Venue Approvals</td>
+                <td><input type="checkbox" /></td>
+                <td>
+                  <div class="chip standard active" data-chip-group="league" data-chip-value="standard">Standard</div>
+                  <div class="chip negotiated" data-chip-group="league" data-chip-value="negotiated">Negotiated</div>
+                </td>
+                <td><input class="small-note-input" type="text" placeholder="League sponsor conflicts, signage approvals, city rules." /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="hint">
+          Use the checkboxes to track which items are confirmed. Use the Standard / Negotiated chips as a quick
+          visual of how “clean” or “custom” the deal is.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Tab switching
+    document.querySelectorAll(".tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.tab;
+        document.querySelectorAll(".tab").forEach(b => b.classList.remove("active"));
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(target).classList.add("active");
+      });
+    });
+
+    // Budget & Pricing summary logic
+    function formatMillions(n) {
+      if (isNaN(n)) return "–";
+      return "$" + n.toFixed(1) + "M";
+    }
+
+    function recalcBudgetSummary() {
+      const rows = document.querySelectorAll("#budget-table tbody tr");
+      let cash = 0, inkind = 0, bonus = 0, community = 0, other = 0;
+
+      rows.forEach(row => {
+        const component = row.dataset.component;
+        const input = row.querySelector(".value-input");
+        const val = parseFloat(input.value) || 0;
+        if (component === "cash") cash = val;
+        if (component === "inkind") inkind = val;
+        if (component === "bonus") bonus = val;
+        if (component === "community") community = val;
+        if (component === "other") other = val;
+      });
+
+      const total = cash + inkind + bonus + community + other;
+      const communityPct = total ? (community / total) * 100 : 0;
+
+      const summary = document.getElementById("value-summary");
+      summary.innerHTML = `
+        <div class="summary-card">
+          <div class="summary-label">Total Annual Partnership Value</div>
+          <div class="summary-value">${formatMillions(total)}</div>
+          <div class="summary-subtext">
+            Cash, in-kind, bonuses, community allocation &amp; other value combined.
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner" style="width:${Math.min(100, (total / Math.max(1, total)) * 100)}%;"></div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Cash vs In-Kind Mix</div>
+          <div class="summary-value">${formatMillions(cash)} cash</div>
+          <div class="summary-subtext">
+            In-kind: ${formatMillions(inkind)} (services, tech, media, etc.)
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner" style="width:${total ? (cash / total) * 100 : 0}%;"></div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-label">Community / Impact Allocation</div>
+          <div class="summary-value">${formatMillions(community)}</div>
+          <div class="summary-subtext">
+            ${communityPct.toFixed(1)}% of total annual value dedicated to impact.
+          </div>
+          <div class="progress-bar">
+            <div class="progress-inner" style="width:${Math.min(100, communityPct)}%;"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    document.querySelectorAll(".value-input").forEach(input => {
+      input.addEventListener("input", recalcBudgetSummary);
+    });
+
+    // Initialize summary on load
+    recalcBudgetSummary();
+
+    // Checklist chips: toggle standard vs negotiated
+    document.querySelectorAll(".chip").forEach(chip => {
+      chip.addEventListener("click", () => {
+        const group = chip.dataset.chipGroup;
+        const value = chip.dataset.chipValue;
+        document.querySelectorAll(`.chip[data-chip-group="${group}"]`).forEach(c => {
+          c.classList.remove("active");
+        });
+        chip.classList.add("active");
+      });
+    });
+  </script>
+</body>
+</html>

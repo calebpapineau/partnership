@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>NWSL Partnership Matrix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-elevated: #0e1224;
+      --accent: #ff4f8b;
+      --accent-soft: rgba(255, 79, 139, 0.18);
+      --accent-alt: #3ddcff;
+      --text-main: #f5f7ff;
+      --text-muted: #9ca4c6;
+      --border-subtle: #262c46;
+      --chip-bg: #181d33;
+      --danger: #ff6b6b;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 24px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 0 0, #22254a 0, #050814 55%);
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 900px;
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      background: rgba(10, 14, 32, 0.85);
+      font-size: 11px;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(255, 79, 139, 0.25);
+    }
+
+    .layout-shell {
+      border-radius: 24px;
+      background: radial-gradient(circle at top left, #22274b 0, #070a17 45%, #02040b 100%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 24px;
+    }
+
+    /* Category tabs */
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .tab-btn {
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 11, 30, 0.9);
+      border-radius: var(--radius-pill);
+      padding: 8px 14px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      gap: 8px;
+      align-items: center;
+      transition: all 0.18s ease-out;
+    }
+
+    .tab-btn span.icon {
+      font-size: 15px;
+    }
+
+    .tab-btn.active {
+      background: radial-gradient(circle at top, #ff4f8b 0, #ff276f 40%, #c71152 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 0 0 1px rgba(255, 79, 139, 0.6), 0 10px 28px rgba(255, 79, 139, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .tab-btn:not(.active):hover {
+      border-color: rgba(255, 255, 255, 0.18);
+      color: #e1e5ff;
+      transform: translateY(-1px);
+    }
+
+    /* Subtype tabs */
+    .subtabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 6px 0 14px;
+    }
+
+    .subtab-btn {
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      background: var(--chip-bg);
+      color: var(--text-muted);
+      font-size: 11px;
+      padding: 4px 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .subtab-btn.active {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .subtab-btn .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-alt);
+    }
+
+    .category-panel {
+      display: none;
+    }
+
+    .category-panel.active {
+      display: block;
+    }
+
+    .category-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+
+    .category-header h2 {
+      margin: 0;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .category-badge {
+      font-size: 11px;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: rgba(12, 201, 166, 0.18);
+      color: #9efbe3;
+      border: 1px solid rgba(104, 255, 214, 0.4);
+    }
+
+    .category-copy {
+      font-size: 12px;
+      color: var(--text-muted);
+      max-width: 550px;
+    }
+
+    /* Table */
+    .table-wrapper {
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-subtle);
+      background: rgba(4, 7, 24, 0.96);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .horizontal-scroll {
+      overflow-x: auto;
+      overflow-y: hidden;
+    }
+
+    table {
+      border-collapse: collapse;
+      min-width: 980px;
+      width: 100%;
+      font-size: 12px;
+    }
+
+    thead {
+      background: linear-gradient(to right, rgba(255, 79, 139, 0.12), rgba(61, 220, 255, 0.08));
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      padding: 10px 10px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #c4c9ff;
+      position: sticky;
+      top: 0;
+      z-index: 3;
+      backdrop-filter: blur(8px);
+    }
+
+    th:first-child {
+      min-width: 220px;
+      max-width: 260px;
+      z-index: 4;
+      left: 0;
+      position: sticky;
+      background: linear-gradient(to right, rgba(5, 8, 26, 0.98), rgba(5, 8, 26, 0.92));
+    }
+
+    td:first-child {
+      position: sticky;
+      left: 0;
+      background: radial-gradient(circle at left, rgba(26, 38, 90, 0.65), rgba(4, 7, 24, 0.95));
+      z-index: 2;
+    }
+
+    .club-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .club-logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      background: radial-gradient(circle at 30% 20%, #ffffff 0, #d7dcff 18%, #545b9d 45%, #020312 100%);
+      padding: 3px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.7);
+    }
+
+    .club-logo img {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      border-radius: 9px;
+      background: #fff;
+    }
+
+    .club-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .club-name {
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .club-market {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .conference-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+      background: rgba(85, 239, 196, 0.08);
+      border: 1px solid rgba(85, 239, 196, 0.45);
+      color: #b9fff0;
+      margin-top: 2px;
+      width: fit-content;
+    }
+
+    .conference-tag.east {
+      background: rgba(61, 220, 255, 0.07);
+      border-color: rgba(61, 220, 255, 0.4);
+      color: #c3f3ff;
+    }
+
+    .partner-entry {
+      padding: 6px 7px;
+      margin-bottom: 6px;
+      border-radius: 10px;
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.02), rgba(7, 11, 32, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .partner-name {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 2px;
+    }
+
+    .partner-description {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .partner-metrics {
+      font-size: 10px;
+      color: #d1d7ff;
+      margin-bottom: 4px;
+    }
+
+    .partner-entry a {
+      font-size: 10px;
+      color: var(--accent-alt);
+      text-decoration: none;
+    }
+
+    .partner-entry a:hover {
+      text-decoration: underline;
+    }
+
+    .no-data {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.18);
+    }
+
+    .subtable {
+      display: none;
+    }
+
+    .subtable.active {
+      display: block;
+    }
+
+    .meta-footnote {
+      margin-top: 10px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .meta-footnote strong {
+      color: #e7ebff;
+    }
+
+    @media (max-width: 900px) {
+      body {
+        padding: 14px;
+      }
+      .layout-shell {
+        padding: 14px;
+        border-radius: 18px;
+      }
+      h1 {
+        font-size: 22px;
+      }
+      .subtitle {
+        font-size: 13px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h3>NWSL Partnership Matrix</h3>
+    <div class="subtitle">
+       Teams are listed on the left (logos + conference), with partnership
+      <strong>type and subtype on the top</strong>. Each cell provides the key partner, role, and metric placeholders
+      (<em>value to club</em>, <em>value to partner / KPIs</em>).
+      This is a club-by-club view of key commercial, brand, activation and civic partnerships
+      across the National Women’s Soccer League, with <strong>Seattle Reign FC</strong> highlighted first.
+      Use the tabs to switch between high-level partnership categories and sub-tabs
+      to drill into specific strategy types (front-of-kit, community impact, etc.).
+    </div>
+    <div class="pill-row">
+      <div class="pill">
+        Data sources: club press releases, NWSL & partner announcements
+      </div>
+      <div class="pill">
+        Monetary estimates: where public/credible; others marked “undisclosed”
+      </div>
+      <div class="pill">
+        Layout: clubs on left, partnership types &amp; subtypes at the top
+      </div>
+    </div>
+  </header>
+
+  <div class="layout-shell">
+    <div id="categoryTabs" class="tabs"></div>
+
+    <div id="tablesContainer"></div>
+
+    <div class="meta-footnote">
+      <strong>Note:</strong> Values are approximate where cited (e.g., record jersey deals or
+      social media value of kit sponsors) and primarily reflect recent seasons in the last
+      decade. Many NWSL contracts are undisclosed; for those, qualitative benefits are emphasized.
+    </div>
+  </div>
+
+  <script>
+    // -------------------------------------------------------------------
+    // Team metadata (logos & geography-style "conference" buckets)
+    // -------------------------------------------------------------------
+    const teams = {
+      "Seattle Reign FC": {
+        market: "Seattle, WA",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/5001384e-e1ec-43a8-adf5-b1cb25229ae0/SRFC-primary.png?format=1500w"
+      },
+      "Portland Thorns FC": {
+        market: "Portland, OR",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/d699b55e-ce76-4eeb-8b9a-a3e52f49e230/Thorns+Full+Color.png?format=100w"
+      },
+      "San Diego Wave FC": {
+        market: "San Diego, CA",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/90594867-91f3-452e-b718-82dc0ec623d3/SD_Logo-full-color.png?format=100w"
+      },
+      "Angel City FC": {
+        market: "Los Angeles, CA",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/a02829c0-f022-457e-84ef-fffadad6583b/ACFC_Crest_Primary_Sol+Rosa.png?format=100w"
+      },
+      "Bay FC": {
+        market: "San Jose / Bay Area, CA",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/3c5c94e1-1d89-4227-a739-2d60b5085b70/Bay+FC.png?format=100w"
+      },
+      "Houston Dash": {
+        market: "Houston, TX",
+        conference: "West",
+        logo: "https://images.nwslsoccer.com/image/private/t_w_120/prd/assets/widgets/teams/ca3f464d6b794a9087d441d75961403f"
+      },
+      "Kansas City Current": {
+        market: "Kansas City, MO",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/5f10d320-4059-49db-a5b2-a11897fac816/SM_KC_Current_PrimaryLogo_3-Color.png?format=100w"
+      },
+      "Utah Royals FC": {
+        market: "Salt Lake City, UT",
+        conference: "West",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/6c4cbeac-16b5-41ac-8aac-f05e76b13863/utahlogo.png?format=100w"
+      },
+      "Racing Louisville FC": {
+        market: "Louisville, KY",
+        conference: "East",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/8d55df9e-d550-411b-b430-b313b387147d/RACING+LOUISVILLE_Full+Color+RGB.png?format=100w"
+      },
+      "North Carolina Courage": {
+        market: "Cary, NC",
+        conference: "East",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/19eefc5a-a513-4a9c-a3e7-92bb6e82a577/Primary_Courage_Gradient_FullLogo.png?format=100w"
+      },
+      "Washington Spirit": {
+        market: "Washington, DC",
+        conference: "East",
+        logo: "https://images.nwslsoccer.com/image/private/t_w_120/prd/assets/widgets/teams/c31d72afc09f42ee86418633aa41390a"
+      },
+      "NJ/NY Gotham FC": {
+        market: "New York / New Jersey",
+        conference: "East",
+        logo: "https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/e41f2864-c8cb-4b6f-97f2-89c21d3686e1/NJNY-Primary.png?format=100w"
+      },
+      "Orlando Pride": {
+        market: "Orlando, FL",
+        conference: "East",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/064052f8-ce42-48e7-9307-8075fc7b5a15/Orlando+Pride.png?format=100w"
+      },
+      "Chicago Stars FC": {
+        market: "Chicago, IL",
+        conference: "East",
+        logo: "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/d0b305e5-c8bc-4a14-a82b-ad6f0977650a/ChicagoStars_Shield_LightOutline_RGB.png?format=100w"
+      }
+    };
+
+    // Display order (Seattle Reign first, then West-ish, then East-ish)
+    const teamOrder = [
+      "Seattle Reign FC",
+      "Portland Thorns FC",
+      "San Diego Wave FC",
+      "Angel City FC",
+      "Bay FC",
+      "Houston Dash",
+      "Kansas City Current",
+      "Utah Royals FC",
+      "Racing Louisville FC",
+      "North Carolina Courage",
+      "Washington Spirit",
+      "NJ/NY Gotham FC",
+      "Orlando Pride",
+      "Chicago Stars FC"
+    ];
+
+    // -------------------------------------------------------------------
+    // Partnership data by taxonomy
+    // -------------------------------------------------------------------
+    const partnerData = {
+      "Monetary Partnerships": {
+        icon: "",
+        description:
+          "Hard-dollar and in-kind value: kit deals, naming rights, and other major revenue drivers for clubs.",
+        subtypes: {
+          "Front-of-Kit Sponsorships":
+            "Primary jersey front partners and associated cash / in-kind value.",
+          "Back & Sleeve Sponsorships":
+            "Back-of-kit, sleeve and secondary shirt assets, often tied to specific verticals.",
+          "Stadium & Facility Naming Rights":
+            "Naming rights to stadiums, training centers or premium spaces.",
+          "League / Media & Shared Revenue":
+            "League-wide media rights and pooled commercial assets shared across clubs."
+        },
+        teams: {
+          "Seattle Reign FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Black Future Co-op Fund",
+                description:
+                  "Philanthropic fund investing in Black-led organizations across Washington; long-time front-of-kit partner featured on both 2024 primary and secondary kits.",
+                clubValue:
+                  "Undisclosed fixed fee plus strong earned-media value; Zoomph estimated ~US$1.1M in jersey social value for Reign’s 2024 season.",
+                partnerValue:
+                  "National visibility on all matches and content, integration into storytelling around Black wealth and community impact.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-unveils-2024-primary-and-secondary-kits"
+              },
+              {
+                partner: "Trupanion (from 2025)",
+                description:
+                  "Seattle-based pet medical insurance company in a new multi-year front-of-kit partnership replacing Black Future Co-op Fund.",
+                clubValue:
+                  "Fresh multi-year cash partnership aligned with local growth brand; flexibility for pet-focused promotions and hospitality.",
+                partnerValue:
+                  "Front-of-shirt exposure in an expanding women’s sports property plus alignment with pet-loving fan base and youth audiences.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-announces-multi-year-front-of-kit-partnership-with-trupanion"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "MultiCare Health System & Ally",
+                description:
+                  "MultiCare appears on the back of the jersey; Ally on the league-standard left sleeve across all clubs.",
+                clubValue:
+                  "Reliable regional healthcare revenue plus league-level sleeve income; in-kind medical services.",
+                partnerValue:
+                  "Association with elite athletes and access to Reign’s fanbase for health and financial-literacy messaging.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": [
+              {
+                partner: "ESPN, CBS, Amazon, Scripps",
+                description:
+                  "Part of NWSL’s 2024–27 domestic media rights package (~US$240M), with games distributed across major broadcast and streaming partners.",
+                clubValue:
+                  "Significant uplift in guaranteed league revenue and national reach; improved platform for selling local partners.",
+                partnerValue:
+                  "Premium women’s football content inventory across linear and digital, aligned with growth in women’s sports viewership.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ]
+          },
+
+          "Portland Thorns FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Ring (from 2025)",
+                description:
+                  "Home security company owned by Amazon; record-setting NWSL front-of-kit deal replacing Providence.",
+                clubValue:
+                  "Largest jersey deal in league history, exceeding Bay FC’s reported US$2.6M per year Sutter Health agreement; deepened resources for facilities and player investment.",
+                partnerValue:
+                  "Prime association with one of NWSL’s biggest brands, plus integration into stadium tech and fan-experience content.",
+                source:
+                  "https://www.allforxi.com/2025/2/19/24368662/the-portland-thorns-and-ring-agree-to-the-most-lucrative-front-of-kit-sponsorship-deal-nwsl-history"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Alaska Airlines & Ally",
+                description:
+                  "Alaska Airlines on the back of kit, Ally on the league sleeve position.",
+                clubValue:
+                  "Incremental jersey revenue and travel support, offsetting operational costs.",
+                partnerValue:
+                  "Frequent broadcast impressions plus tie-ins for travel offers to Thorns fans.",
+                source:
+                  "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "San Diego Wave FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Kaiser Permanente",
+                description:
+                  "Healthcare provider serving as primary kit partner since Wave’s inaugural season, featured prominently on 2024 Del Sol and Poderosa kits.",
+                clubValue:
+                  "Multi-year healthcare partnership plus presenting rights for jersey launches and club content; 2024 jersey social value estimated at ~US$4.2M.",
+                partnerValue:
+                  "Brand exposure across a fast-growing West Coast club and alignment with women’s health and fitness.",
+                source:
+                  "https://sandiegowavefc.com/san-diego-wave-fc-unveils-new-2024-del-sol-and-poderosa-jerseys/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "24 Hour Fitness, Dexcom & Ally",
+                description:
+                  "24 Hour Fitness on back-of-kit, Dexcom on right sleeve, Ally on league-standard left sleeve.",
+                clubValue:
+                  "Layered jersey inventory driving one of the highest social values in the league (~US$4.2M in 2024).",
+                partnerValue:
+                  "Direct connection to health-conscious fans with integrated fitness and diabetes-awareness messaging.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Angel City FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "DoorDash",
+                description:
+                  "Founding front-of-kit sponsor announced prior to club’s debut, using ACFC’s unique model where a portion of sponsor spend funds community projects.",
+                clubValue:
+                  "Multi-year front-of-kit revenue plus built-in funding for social impact in LA.",
+                partnerValue:
+                  "High-visibility jersey presence in a celebrity-backed club and halo from ACFC’s community reinvestment model.",
+                source:
+                  "https://www.nwslsoccer.com/news/angel-city-football-club-strikes-sponsorship-with-doordash"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Sprouts Farmers Market, Birdies & Ally",
+                description:
+                  "Sprouts as back-of-kit partner; Birdies on the right sleeve; Ally on the left sleeve across the league.",
+                clubValue:
+                  "Additional mid-six-figure revenue tied to grocery and footwear categories, plus retailer activation opportunities.",
+                partnerValue:
+                  "Authentic positioning around healthy lifestyles and women-founded brands via Angel City’s storytelling-heavy content.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Bay FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Sutter Health",
+                description:
+                  "First founding partner and front-of-kit sponsor through 2028; also the club’s official medical provider.",
+                clubValue:
+                  "Reported average of ~US$2.6M per year over five years – at signing, the largest jersey deal in NWSL history.",
+                partnerValue:
+                  "Front-of-kit visibility plus mandate to co-invest in youth health and wellness programs across Northern California.",
+                source:
+                  "https://bayfc.com/press-releases/bay-fc-announces-historic-sponsorship-with-sutter-health-as-first-founding-partner-front-of-kit-partner-and-official-medical-provider/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Sixth Street, Trader Joe’s, Visa & Ally",
+                description:
+                  "Sixth Street and Trader Joe’s on back-of-kit; Visa on right sleeve; Ally on league-standard left sleeve.",
+                clubValue:
+                  "Reportedly ~US$500k+ per season for the Sixth Street back-of-shirt deal alone, plus incremental revenue from Trader Joe’s and Visa.",
+                partnerValue:
+                  "Investors and consumer brands gain deep integration with a new Bay Area franchise and its health/wellness positioning.",
+                source:
+                  "https://www.insideworldfootball.com/2024/04/03/nwsl-newcomers-bay-fc-load-sponsorship-roster/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Houston Dash": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "MD Anderson Cancer Center",
+                description:
+                  "Long-running front-of-kit partnership with one of the world’s leading cancer centers.",
+                clubValue:
+                  "Stable primary jersey income and medical partnerships; social value of ~US$1.1M in 2024.",
+                partnerValue:
+                  "Platform to reinforce their cancer awareness mission to diverse Houston and NWSL audiences.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Shell Energy, Magellan & Ally",
+                description:
+                  "Shell Energy on back-of-jersey; Magellan on right sleeve; Ally on left sleeve.",
+                clubValue:
+                  "Diversified energy and logistics partners with jersey visibility and B2B hospitality.",
+                partnerValue:
+                  "Community positioning and storytelling connecting energy transition themes with women’s sport.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Kansas City Current": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "United Way of Greater Kansas City",
+                description:
+                  "Purpose-led front-of-kit deal, aligning KC Current with a flagship local philanthropic brand.",
+                clubValue:
+                  "Front-of-shirt revenue plus a distinctive social impact story in a new soccer-specific stadium.",
+                partnerValue:
+                  "Continuous visibility and fundraising narrative around community impact in the KC region.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Palmer Square Capital, LaCroix, Blue Cross Blue Shield KC & Ally",
+                description:
+                  "Financial services and beverage partners on back and sleeve inventory; Ally on league-standard sleeve.",
+                clubValue:
+                  "One of the league’s highest jersey social values (~US$4.1M in 2024) tied to a winning team and new stadium buzz.",
+                partnerValue:
+                  "Association with a Shield-winning club and access to premium hospitality at CPKC Stadium.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [
+              {
+                partner: "CPKC Stadium",
+                description:
+                  "Ten-year naming rights deal with Canadian Pacific Kansas City (CPKC) for the first purpose-built women’s pro soccer stadium.",
+                clubValue:
+                  "Anchors financing for a reported ~US$117M+ stadium and associated development; recurring naming-rights revenue.",
+                partnerValue:
+                  "Landmark association with the global growth of women’s football and visible branding throughout the stadium district.",
+                source:
+                  "https://frontofficesports.com/major-media-rights-deals-landmark-stadium-pact-to-propel-nwsls-growth/"
+              }
+            ],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Utah Royals FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "America First Credit Union",
+                description:
+                  "Front-of-kit and financial partner for the relaunched Utah Royals.",
+                clubValue:
+                  "Key local financial sponsorship supporting the club’s return to NWSL.",
+                partnerValue:
+                  "Regional brand integration and community programs tied to youth financial literacy and soccer.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Intermountain Health & Ally",
+                description:
+                  "Intermountain on the right sleeve; Ally on the left sleeve.",
+                clubValue:
+                  "Healthcare-in-kind and cash, helping offset performance and medical costs.",
+                partnerValue:
+                  "Visibility across Utah’s premier women’s sports property tied to family health initiatives.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Racing Louisville FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "GE Appliances",
+                description:
+                  "Louisville-based GE Appliances as front-of-kit partner.",
+                clubValue:
+                  "Local-anchor corporate sponsorship with recurring jersey revenue (~US$756k social value in 2024).",
+                partnerValue:
+                  "Integration into matchday experiences and storytelling around home life and innovation.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "PNC Bank, Toyota & Ally",
+                description:
+                  "PNC on the back, Toyota on right sleeve, Ally on left sleeve.",
+                clubValue:
+                  "Financial services and automotive partners diversify revenue across multiple categories.",
+                partnerValue:
+                  "Access to a growing fan base and premium hospitality inventory.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "North Carolina Courage": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Merz Aesthetics",
+                description:
+                  "Global aesthetics brand on front of Courage kits.",
+                clubValue:
+                  "International brand partnership with strong B2B activation potential.",
+                partnerValue:
+                  "Connection to empowerment narratives and global women’s football audiences.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Jump & Ally",
+                description:
+                  "Jump on right sleeve; Ally on all left sleeves league-wide.",
+                clubValue:
+                  "Additional jersey income tied to tech and finance verticals.",
+                partnerValue:
+                  "Visibility in a club with championship history and strong youth pipeline.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Washington Spirit": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "CVS Health",
+                description:
+                  "Healthcare and retail pharmacy giant as primary jersey partner.",
+                clubValue:
+                  "Strong national brand partner supporting Spirit’s push into repeated championship contention.",
+                partnerValue:
+                  "Storytelling around women’s health, vaccinations and wellness across DC-area and national audiences.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Matchday.com, SNICKERS & Ally",
+                description:
+                  "Matchday.com as back-of-kit gaming partner; SNICKERS on right sleeve; Ally on left sleeve.",
+                clubValue:
+                  "New digital gaming revenue stream plus CPG activation via candy brand.",
+                partnerValue:
+                  "Association with a club that has appeared in consecutive NWSL championships and growing national profile.",
+                source: "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "NJ/NY Gotham FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "CarMax",
+                description:
+                  "Automotive retailer as primary jersey sponsor for the reigning champions.",
+                clubValue:
+                  "Multi-year front-of-kit deal that underpins club’s commercial growth post-championship.",
+                partnerValue:
+                  "Access to a bicoastal fan base and broadcast impressions during high-profile matches.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Dove, Grüns & Ally",
+                description:
+                  "Record-breaking back-of-kit deal with Dove plus additional branding via Grüns and Ally sleeves.",
+                clubValue:
+                  "Back-of-kit fee reportedly exceeding prior US$500k benchmark for Bay FC, underscoring league’s growth.",
+                partnerValue:
+                  "Platform for Dove’s ‘Keep Her in the Game’ initiative aimed at reducing girls’ dropout from sports.",
+                source:
+                  "https://www.allforxi.com/2025/2/13/24365106/nj-ny-gotham-fc-signs-new-record-breaking-sponsorship-with-dove-nwsl-national-womens-soccer-league"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Orlando Pride": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Orlando Health",
+                description:
+                  "Longstanding healthcare front-of-kit sponsor.",
+                clubValue:
+                  "Major local corporate partnership; ~US$3.6M in jersey social value in 2024.",
+                partnerValue:
+                  "Visibility across a Florida club with star players and national TV exposure.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Publix, United Way & Ally",
+                description:
+                  "Publix on back, United Way on right sleeve, Ally on left sleeve.",
+                clubValue:
+                  "Grocery and nonprofit partners add breadth to Pride’s sponsor portfolio.",
+                partnerValue:
+                  "Retail promotions and cause-aligned campaigns with a broad Florida fan base.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          },
+
+          "Chicago Stars FC": {
+            "Front-of-Kit Sponsorships": [
+              {
+                partner: "Wintrust",
+                description:
+                  "Regional financial institution historically appearing on Chicago Red Stars jerseys; expected to transition with Chicago Stars FC branding.",
+                clubValue:
+                  "Core financial services partnership with ~US$748k jersey social value in 2024.",
+                partnerValue:
+                  "Deep local sports association in a major U.S. market across men’s and women’s teams.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Back & Sleeve Sponsorships": [
+              {
+                partner: "Meijer, Sloan, Nella Spec & Ally",
+                description:
+                  "Retail and plumbing brands fill back and sleeve inventory; Ally on league-standard sleeve.",
+                clubValue:
+                  "Layered inventory helps balance revenue for a club going through a brand refresh.",
+                partnerValue:
+                  "Access to a passionate Midwest fan base and hospitality assets.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Stadium & Facility Naming Rights": [],
+            "League / Media & Shared Revenue": []
+          }
+        }
+      },
+
+      "Brand & Strategic Alignments": {
+        icon: "",
+        description:
+          "Deeper strategic fits: medical providers, financial institutions, tech and purpose-led brands that integrate beyond logo placement.",
+        subtypes: {
+          "Health & Medical Partners":
+            "Healthcare systems using clubs to tell wellness, recovery and equity stories.",
+          "Financial & Insurance Partners":
+            "Banks, credit unions and insurers aligned with long-term club strategy.",
+          "Technology & Innovation":
+            "Tech, security and data partners driving innovation narratives.",
+          "Purpose-Led & Philanthropic":
+            "Brands whose primary angle is equity, empowerment or community impact."
+        },
+        teams: {
+          "Seattle Reign FC": {
+            "Health & Medical Partners": [
+              {
+                partner: "MultiCare Health System",
+                description:
+                  "Back-of-kit and medical partner providing care to players and supporting community health programs.",
+                clubValue:
+                  "Integrated sports medicine support plus health-content storytelling assets.",
+                partnerValue:
+                  "Positioning as the trusted provider for women’s high-performance athletes.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Financial & Insurance Partners": [
+              {
+                partner: "Trupanion",
+                description:
+                  "Pet insurance brand aligning with Seattle’s strong pet culture and Reign’s fan demographics.",
+                clubValue:
+                  "Category-exclusive insurance partnership with upside from activation performance.",
+                partnerValue:
+                  "Authentic local story around pets, people and community through matchday content.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-announces-multi-year-front-of-kit-partnership-with-trupanion"
+              }
+            ],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": [
+              {
+                partner: "Black Future Co-op Fund",
+                description:
+                  "Centering racial equity and Black wealth creation as part of the club’s front-of-kit identity.",
+                clubValue:
+                  "Differentiated brand positioning in global women’s football around equity and justice.",
+                partnerValue:
+                  "Platform to elevate Black-led organizations statewide through Reign games and content.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-unveils-2024-primary-and-secondary-kits"
+              }
+            ]
+          },
+
+          "Portland Thorns FC": {
+            "Health & Medical Partners": [],
+            "Financial & Insurance Partners": [],
+            "Technology & Innovation": [
+              {
+                partner: "Ring (Amazon)",
+                description:
+                  "Security technology integrated into facilities and behind-the-scenes content, not just jersey branding.",
+                clubValue:
+                  "Access to tech resources and fan-experience storytelling (e.g., ‘Ring cam’ content).",
+                partnerValue:
+                  "Chance to humanize Ring’s product suite via access-based content with Thorns players and fans.",
+                source:
+                  "https://www.allforxi.com/2025/2/19/24368662/the-portland-thorns-and-ring-agree-to-the-most-lucrative-front-of-kit-sponsorship-deal-nwsl-history"
+              }
+            ],
+            "Purpose-Led & Philanthropic": [
+              {
+                partner: "Ring Community Initiatives",
+                description:
+                  "Ring and Thorns co-create programs spotlighting women leaders, coaching/referee certification and tech-career pathways.",
+                clubValue:
+                  "Structured pipeline for local women into soccer and tech roles, supporting club culture.",
+                partnerValue:
+                  "Proof points for Ring’s commitment to women’s sports and safe communities.",
+                source:
+                  "https://www.allforxi.com/2025/2/19/24368662/the-portland-thorns-and-ring-agree-to-the-most-lucrative-front-of-kit-sponsorship-deal-nwsl-history"
+              }
+            ]
+          },
+
+          "San Diego Wave FC": {
+            "Health & Medical Partners": [
+              {
+                partner: "Kaiser Permanente",
+                description:
+                  "Beyond jersey placement, Kaiser leads health screenings, youth clinics and wellness education around Wave matches.",
+                clubValue:
+                  "Deep healthcare partner that adds credibility to Wave’s ‘Make Waves’ community strategy.",
+                partnerValue:
+                  "Real-life touchpoints with families via clinics and matchday activations.",
+                source:
+                  "https://sandiegowavefc.com/2024jerseys/"
+              }
+            ],
+            "Financial & Insurance Partners": [],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": []
+          },
+
+          "Angel City FC": {
+            "Health & Medical Partners": [],
+            "Financial & Insurance Partners": [],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": [
+              {
+                partner: "DoorDash ‘Angel City Model’",
+                description:
+                  "ACFC’s model directs a portion of sponsor dollars (e.g., DoorDash spend) into community organizations fighting food insecurity.",
+                clubValue:
+                  "Brand differentiation and authentic equity narrative that resonates with global audiences.",
+                partnerValue:
+                  "Measured community impact and storytelling that extends beyond traditional sports marketing.",
+                source:
+                  "https://shop.angelcity.com/blogs/members/doordash"
+              }
+            ]
+          },
+
+          "Bay FC": {
+            "Health & Medical Partners": [
+              {
+                partner: "Sutter Health",
+                description:
+                  "Official medical provider running Bay FC’s Health & Wellness platform for young women across Northern California.",
+                clubValue:
+                  "High-quality player care and shared investment in community wellness programs.",
+                partnerValue:
+                  "Visibility as the club’s medical backbone and a champion of women’s health.",
+                source:
+                  "https://vitals.sutterhealth.org/bay-fc-reveals-inaugural-kit-at-media-day-sutter-health-is-featured-sponsor/"
+              }
+            ],
+            "Financial & Insurance Partners": [
+              {
+                partner: "Meriwest Credit Union",
+                description:
+                  "Credit union partner supporting gender equity campaigns and financial education.",
+                clubValue:
+                  "Financial-literacy activation content for Bay FC fans and academy players.",
+                partnerValue:
+                  "Association with a pioneering women’s pro club and next-generation athletes.",
+                source:
+                  "https://www.insideworldfootball.com/2024/04/03/nwsl-newcomers-bay-fc-load-sponsorship-roster/"
+              }
+            ],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": []
+          },
+
+          "Kansas City Current": {
+            "Health & Medical Partners": [],
+            "Financial & Insurance Partners": [
+              {
+                partner: "United Way & Palmer Square",
+                description:
+                  "Combination of local philanthropy (United Way) and institutional capital (Palmer Square) anchoring KC’s commercial story.",
+                clubValue:
+                  "Balanced mix of impact and financial returns that supports aggressive growth.",
+                partnerValue:
+                  "Shared platform to talk about community reinvestment and women’s sports as an asset class.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": [
+              {
+                partner: "United Way of Greater Kansas City",
+                description:
+                  "Front-of-kit partnership framed as a statement that community impact is core to the Current’s identity.",
+                clubValue:
+                  "Tangible differentiation versus clubs with purely commercial front-of-kit brands.",
+                partnerValue:
+                  "Visibility for United Way’s campaigns at every KC home match and beyond.",
+                source:
+                  "https://www.forsoccer.com/insight/2024-nwsl-jersey-sponsors/"
+              }
+            ]
+          },
+
+          "NJ/NY Gotham FC": {
+            "Health & Medical Partners": [],
+            "Financial & Insurance Partners": [
+              {
+                partner: "CarMax",
+                description:
+                  "Automotive retailer leaning into Gotham’s championship run and tri-state fan base.",
+                clubValue:
+                  "National retail partner supporting growth of the club’s commercial department.",
+                partnerValue:
+                  "Storytelling around road trips, mobility and player journeys.",
+                source: "https://zoomph.com/blog/nwsl-jersey-sponsors/"
+              }
+            ],
+            "Technology & Innovation": [],
+            "Purpose-Led & Philanthropic": [
+              {
+                partner: "Dove – Keep Her in the Game",
+                description:
+                  "Back-of-kit partner funding research and programming to keep girls in sport amid body-image pressures.",
+                clubValue:
+                  "Credible partner for Gotham’s role-model players, with funding for youth programs.",
+                partnerValue:
+                  "Authentic platform to activate Dove’s self-esteem and body-confidence work.",
+                source:
+                  "https://www.allforxi.com/2025/2/13/24365106/nj-ny-gotham-fc-signs-new-record-breaking-sponsorship-with-dove-nwsl-national-womens-soccer-league"
+              }
+            ]
+          }
+        }
+      },
+
+      "Marketing & Fan Activations": {
+        icon: "",
+        description:
+          "How clubs and partners turn assets into experiences: matchday activations, digital storytelling and grassroots programs.",
+        subtypes: {
+          "Matchday & In-Stadium":
+            "On-site activations, concourse zones, giveaways and fan experiences.",
+          "Digital Content & Storytelling":
+            "Social, video and branded content series built with partners.",
+          "Grassroots & Youth Programs":
+            "Clinics, camps and youth tournaments seeded by sponsors.",
+          "Cause & Mission Campaigns":
+            "Integrated campaigns around equity, health, education or environment."
+        },
+        teams: {
+          "Seattle Reign FC": {
+            "Matchday & In-Stadium": [
+              {
+                partner: "Trupanion – Pet-focused matchdays",
+                description:
+                  "Emerging activation platform featuring adoptable pets, pet-friendly experiences and Reign-branded pet content.",
+                clubValue:
+                  "Family-friendly hook that can drive incremental ticketing and merchandise.",
+                partnerValue:
+                  "Direct access to pet owners with high emotional engagement at matches.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-announces-multi-year-front-of-kit-partnership-with-trupanion"
+              }
+            ],
+            "Digital Content & Storytelling": [
+              {
+                partner: "Black Future Co-op Fund",
+                description:
+                  "Storytelling around Black-led organizations and entrepreneurs amplified through Reign channels.",
+                clubValue:
+                  "Elevated brand equity among fans prioritizing social justice.",
+                partnerValue:
+                  "New donors and volunteers exposed through Reign’s digital reach.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-unveils-2024-primary-and-secondary-kits"
+              }
+            ],
+            "Grassroots & Youth Programs": [],
+            "Cause & Mission Campaigns": []
+          },
+
+          "San Diego Wave FC": {
+            "Matchday & In-Stadium": [
+              {
+                partner: "Kaiser Permanente & 24 Hour Fitness",
+                description:
+                  "Health kiosks, fitness challenges and on-pitch recognitions themed to Wave’s ‘Make Waves’ jerseys.",
+                clubValue:
+                  "Sponsors underwrite in-stadium experiences while supporting year-round engagement.",
+                partnerValue:
+                  "Sampling and sign-up opportunities with a highly targeted audience.",
+                source: "https://sandiegowavefc.com/2024jerseys/"
+              }
+            ],
+            "Digital Content & Storytelling": [],
+            "Grassroots & Youth Programs": [],
+            "Cause & Mission Campaigns": []
+          },
+
+          "Angel City FC": {
+            "Matchday & In-Stadium": [
+              {
+                partner: "DoorDash & Sprouts – Food security activations",
+                description:
+                  "On-site activations and partner donations tied to key match moments to fight food insecurity in LA.",
+                clubValue:
+                  "Game-integrated giving that deepens fan emotional connection to ACFC.",
+                partnerValue:
+                  "Clear KPI story: meals donated or dollars raised every season.",
+                source:
+                  "https://angelcity.com/acfc-post/angel-city-football-club-strikes-founding-front-of-kit-sponsorship-with"
+              }
+            ],
+            "Digital Content & Storytelling": [
+              {
+                partner: "Angel City ‘Effect’ campaigns",
+                description:
+                  "Branded content case studies (e.g., Hashtag Sports) showcasing how sponsor dollars are shared with community organizations.",
+                clubValue:
+                  "Global recognition and awards that strengthen future sponsor pitches.",
+                partnerValue:
+                  "Proof that cause-based sponsorship drives measurable social and media impact.",
+                source:
+                  "https://www.hashtagsports.com/awards/shortlist-2024/the-angel-city-effect"
+              }
+            ],
+            "Grassroots & Youth Programs": [],
+            "Cause & Mission Campaigns": []
+          },
+
+          "Bay FC": {
+            "Matchday & In-Stadium": [],
+            "Digital Content & Storytelling": [
+              {
+                partner: "Sutter Health – Kit reveal & health content",
+                description:
+                  "Inaugural kit launch featuring community volunteers packing healthcare kits for underserved women.",
+                clubValue:
+                  "Moment-in-time PR spike and visual identity tied to purpose.",
+                partnerValue:
+                  "Earned media around Sutter’s commitment to women’s health.",
+                source:
+                  "https://bayfc.com/press-releases/bay-fc-reveals-inaugural-kit-at-media-day/"
+              }
+            ],
+            "Grassroots & Youth Programs": [],
+            "Cause & Mission Campaigns": []
+          },
+
+          "NJ/NY Gotham FC": {
+            "Matchday & In-Stadium": [],
+            "Digital Content & Storytelling": [],
+            "Grassroots & Youth Programs": [],
+            "Cause & Mission Campaigns": [
+              {
+                partner: "Dove – Keep Her in the Game",
+                description:
+                  "Clinics, coach education and youth-leadership councils aimed at stemming the dropout of teenage girls from sports.",
+                clubValue:
+                  "Youth pathway touchpoints and community goodwill across tri-state clubs.",
+                partnerValue:
+                  "Real-world program outcomes (players/teams reached) to accompany brand messaging.",
+                source:
+                  "https://www.allforxi.com/2025/2/13/24365106/nj-ny-gotham-fc-signs-new-record-breaking-sponsorship-with-dove-nwsl-national-womens-soccer-league"
+              }
+            ]
+          }
+        }
+      },
+
+      "Civic & Community Impact": {
+        icon: "",
+        description:
+          "Long-horizon infrastructure, education and social-impact partnerships that build legacy beyond matchday.",
+        subtypes: {
+          "Fields, Facilities & Infrastructure":
+            "Mini-pitches, stadium projects and training centers with community access.",
+          "Health, Wellness & Mental Health":
+            "Programs targeting physical, mental and emotional well-being.",
+          "Education, Youth & Leadership":
+            "Scholarships, leadership programs and school-based initiatives.",
+          "Equity, Justice & Economic Inclusion":
+            "Partnerships focused on racial equity, gender equity and inclusion."
+        },
+        teams: {
+          "Seattle Reign FC": {
+            "Fields, Facilities & Infrastructure": [
+              {
+                partner: "RAVE Foundation & Seattle Sounders FC",
+                description:
+                  "Joint plan to unveil 14 additional free-play mini-pitches in underserved communities across Washington by the end of 2025.",
+                clubValue:
+                  "Visible community footprint in neighborhoods across the state and alignment with 2026 World Cup legacy plans.",
+                partnerValue:
+                  "Proof of long-term commitment to free play and equitable access to soccer facilities.",
+                source:
+                  "https://www.reignfc.com/news/reign-fc-sounders-fc-amp-rave-foundation-announce-plans-to-unveil-14-additional-soccer-mini-pitches-for-free-play-in-washington-by-end-of-2025"
+              }
+            ],
+            "Health, Wellness & Mental Health": [],
+            "Education, Youth & Leadership": [],
+            "Equity, Justice & Economic Inclusion": [
+              {
+                partner: "Black Future Co-op Fund",
+                description:
+                  "Funding and storytelling that centers Black-led organizations and addresses structural inequities in Washington.",
+                clubValue:
+                  "Deep connection to local civic leaders and community trust.",
+                partnerValue:
+                  "Amplified platform to share impact stories with Reign’s local and global audience.",
+                source:
+                  "https://www.reignfc.com/news/seattle-reign-fc-unveils-2024-primary-and-secondary-kits"
+              }
+            ]
+          },
+
+          "Kansas City Current": {
+            "Fields, Facilities & Infrastructure": [
+              {
+                partner: "CPKC Stadium",
+                description:
+                  "First purpose-built pro women’s soccer stadium, serving as a year-round community and events hub on the riverfront.",
+                clubValue:
+                  "Flagship asset that underpins ticketing, premium revenue and long-term franchise valuation.",
+                partnerValue:
+                  "Decade-long brand association with women’s sports infrastructure and civic development.",
+                source:
+                  "https://soccerstadiumdigest.com/2023/10/new-for-2024-cpkc-stadium/"
+              }
+            ],
+            "Health, Wellness & Mental Health": [],
+            "Education, Youth & Leadership": [],
+            "Equity, Justice & Economic Inclusion": []
+          },
+
+          "Angel City FC": {
+            "Fields, Facilities & Infrastructure": [],
+            "Health, Wellness & Mental Health": [],
+            "Education, Youth & Leadership": [],
+            "Equity, Justice & Economic Inclusion": [
+              {
+                partner: "DoorDash & local food-security NGOs",
+                description:
+                  "Over US$1M committed over life of partnership to combat food insecurity through ACFC’s revenue-sharing model with community partners.",
+                clubValue:
+                  "Clear, measurable ‘give back’ story that differentiates the club globally.",
+                partnerValue:
+                  "Strong proof of impact and alignment with social-responsibility goals.",
+                source:
+                  "https://shop.angelcity.com/blogs/members/doordash"
+              }
+            ]
+          },
+
+          "Bay FC": {
+            "Fields, Facilities & Infrastructure": [],
+            "Health, Wellness & Mental Health": [
+              {
+                partner: "Sutter Health – Health & Wellness Platform",
+                description:
+                  "Joint platform delivering health and wellness programs for young people with a focus on girls in the Bay Area.",
+                clubValue:
+                  "Anchors Bay FC’s identity around women’s health and community uplift.",
+                partnerValue:
+                  "Pilot for scalable health-education programs built around women’s sport.",
+                source:
+                  "https://vitals.sutterhealth.org/bay-fc-reveals-inaugural-kit-at-media-day-sutter-health-is-featured-sponsor/"
+              }
+            ],
+            "Education, Youth & Leadership": [],
+            "Equity, Justice & Economic Inclusion": []
+          }
+        }
+      }
+    };
+
+    // -------------------------------------------------------------------
+    // UI construction helpers
+    // -------------------------------------------------------------------
+    function slugify(str) {
+      return str
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)+/g, "");
+    }
+
+    function buildCategoryTabs() {
+      const tabsContainer = document.getElementById("categoryTabs");
+      const categories = Object.keys(partnerData);
+
+      categories.forEach((catKey, index) => {
+        const info = partnerData[catKey];
+        const btn = document.createElement("button");
+        btn.className = "tab-btn" + (index === 0 ? " active" : "");
+        btn.dataset.category = catKey;
+        btn.innerHTML = `<span class="icon">${info.icon}</span>${catKey}`;
+        btn.addEventListener("click", () => setActiveCategory(catKey));
+        tabsContainer.appendChild(btn);
+      });
+    }
+
+    function setActiveCategory(categoryKey) {
+      // Category tab states
+      document.querySelectorAll(".tab-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.category === categoryKey);
+      });
+
+      // Panels
+      document.querySelectorAll(".category-panel").forEach((panel) => {
+        panel.classList.toggle(
+          "active",
+          panel.dataset.category === categoryKey
+        );
+      });
+
+      // When switching categories, default each to 'All' subtype
+      const panel = document.querySelector(
+        `.category-panel[data-category="${categoryKey}"]`
+      );
+      if (!panel) return;
+      const firstSubtab = panel.querySelector(".subtab-btn[data-subtype='all']");
+      if (firstSubtab) {
+        activateSubtype(panel, "all");
+      }
+    }
+
+    function activateSubtype(panel, subtypeId) {
+      const categoryId = panel.dataset.categoryId;
+
+      // Toggle buttons
+      panel.querySelectorAll(".subtab-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.subtype === subtypeId);
+      });
+
+      // Toggle tables
+      panel.querySelectorAll(".subtable").forEach((tbl) => {
+        tbl.classList.toggle(
+          "active",
+          tbl.dataset.subtype === subtypeId &&
+            tbl.dataset.categoryId === categoryId
+        );
+      });
+    }
+
+    function createTable(categoryKey, subtypeFilter) {
+      const category = partnerData[categoryKey];
+      const categoryId = slugify(categoryKey);
+      const subtypeId = subtypeFilter ? slugify(subtypeFilter) : "all";
+
+      const tblWrapper = document.createElement("div");
+      tblWrapper.className = "table-wrapper subtable";
+      tblWrapper.dataset.categoryId = categoryId;
+      tblWrapper.dataset.subtype = subtypeId;
+
+      const scroll = document.createElement("div");
+      scroll.className = "horizontal-scroll";
+
+      const table = document.createElement("table");
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+
+      const thClub = document.createElement("th");
+      thClub.textContent = "Club";
+      headerRow.appendChild(thClub);
+
+      const subtypes = Object.keys(category.subtypes);
+      const usedSubtypes = subtypeFilter ? [subtypeFilter] : subtypes;
+
+      usedSubtypes.forEach((subtypeName) => {
+        const th = document.createElement("th");
+        th.textContent = subtypeName;
+        th.title = category.subtypes[subtypeName] || "";
+        headerRow.appendChild(th);
+      });
+
+      thead.appendChild(headerRow);
+      table.appendChild(thead);
+
+      const tbody = document.createElement("tbody");
+
+      teamOrder.forEach((teamName) => {
+        const row = document.createElement("tr");
+
+        // Club cell
+        const clubCell = document.createElement("td");
+        clubCell.className = "club-cell";
+
+        const club = teams[teamName] || {};
+        const logoDiv = document.createElement("div");
+        logoDiv.className = "club-logo";
+
+        if (club.logo) {
+          const img = document.createElement("img");
+          img.src = club.logo;
+          img.alt = teamName + " logo";
+          logoDiv.appendChild(img);
+        } else {
+          logoDiv.textContent = teamName
+            .split(" ")
+            .map((w) => w[0])
+            .join("");
+        }
+
+        const metaDiv = document.createElement("div");
+        metaDiv.className = "club-meta";
+
+        const nameDiv = document.createElement("div");
+        nameDiv.className = "club-name";
+        nameDiv.textContent = teamName;
+        metaDiv.appendChild(nameDiv);
+
+        if (club.market) {
+          const marketDiv = document.createElement("div");
+          marketDiv.className = "club-market";
+          marketDiv.textContent = club.market;
+          metaDiv.appendChild(marketDiv);
+        }
+
+        if (club.conference) {
+          const conf = document.createElement("div");
+          conf.className =
+            "conference-tag " + (club.conference === "East" ? "east" : "");
+          conf.textContent =
+            club.conference === "West" ? "West Cluster" : "East Cluster";
+          metaDiv.appendChild(conf);
+        }
+
+        clubCell.appendChild(logoDiv);
+        clubCell.appendChild(metaDiv);
+        row.appendChild(clubCell);
+
+        // Partnership cells
+        usedSubtypes.forEach((subtypeName) => {
+          const cell = document.createElement("td");
+          const teamEntry =
+            category.teams && category.teams[teamName]
+              ? category.teams[teamName]
+              : null;
+          const deals =
+            (teamEntry && teamEntry[subtypeName]) ||
+            (subtypeFilter ? [] : []); // default empty
+
+          if (!deals || deals.length === 0) {
+            const span = document.createElement("span");
+            span.className = "no-data";
+            span.textContent = "—";
+            cell.appendChild(span);
+          } else {
+            deals.forEach((deal) => {
+              const entry = document.createElement("div");
+              entry.className = "partner-entry";
+
+              const name = document.createElement("div");
+              name.className = "partner-name";
+              name.textContent = deal.partner || "Partner";
+              entry.appendChild(name);
+
+              if (deal.description) {
+                const desc = document.createElement("div");
+                desc.className = "partner-description";
+                desc.textContent = deal.description;
+                entry.appendChild(desc);
+              }
+
+              if (deal.clubValue || deal.partnerValue) {
+                const metrics = document.createElement("div");
+                metrics.className = "partner-metrics";
+                metrics.innerHTML =
+                  (deal.clubValue
+                    ? "<strong>Club value:</strong> " +
+                      deal.clubValue +
+                      "<br>"
+                    : "") +
+                  (deal.partnerValue
+                    ? "<strong>Partner value:</strong> " + deal.partnerValue
+                    : "");
+                entry.appendChild(metrics);
+              }
+
+              if (deal.source) {
+                const link = document.createElement("a");
+                link.href = deal.source;
+                link.target = "_blank";
+                link.rel = "noopener noreferrer";
+                link.textContent = "Source";
+                entry.appendChild(link);
+              }
+
+              cell.appendChild(entry);
+            });
+          }
+
+          row.appendChild(cell);
+        });
+
+        tbody.appendChild(row);
+      });
+
+      table.appendChild(tbody);
+      scroll.appendChild(table);
+      tblWrapper.appendChild(scroll);
+      return tblWrapper;
+    }
+
+    function buildCategoryPanels() {
+      const container = document.getElementById("tablesContainer");
+      const categories = Object.keys(partnerData);
+
+      categories.forEach((catKey, catIndex) => {
+        const catInfo = partnerData[catKey];
+        const panel = document.createElement("section");
+        panel.className =
+          "category-panel" + (catIndex === 0 ? " active" : "");
+        panel.dataset.category = catKey;
+        panel.dataset.categoryId = slugify(catKey);
+
+        const header = document.createElement("div");
+        header.className = "category-header";
+
+        const left = document.createElement("div");
+        const h2 = document.createElement("h2");
+        h2.innerHTML = `<span>${catInfo.icon}</span> ${catKey}`;
+        left.appendChild(h2);
+
+        const badge = document.createElement("div");
+        badge.className = "category-badge";
+        badge.textContent = "Partner Taxonomy: Strategic Tier";
+        left.appendChild(badge);
+
+        const right = document.createElement("div");
+        right.className = "category-copy";
+        right.textContent = catInfo.description;
+
+        header.appendChild(left);
+        header.appendChild(right);
+
+        const subtabs = document.createElement("div");
+        subtabs.className = "subtabs";
+
+        const allBtn = document.createElement("button");
+        allBtn.className = "subtab-btn active";
+        allBtn.dataset.subtype = "all";
+        allBtn.innerHTML = `<span class="dot"></span>Partner Taxonomy: All Sub-Types`;
+        allBtn.addEventListener("click", () => activateSubtype(panel, "all"));
+        subtabs.appendChild(allBtn);
+
+        Object.keys(catInfo.subtypes).forEach((subKey) => {
+          const btn = document.createElement("button");
+          btn.className = "subtab-btn";
+          btn.dataset.subtype = slugify(subKey);
+          btn.innerHTML = `<span class="dot"></span>${subKey}`;
+          btn.title = catInfo.subtypes[subKey] || "";
+          btn.addEventListener("click", () =>
+            activateSubtype(panel, slugify(subKey))
+          );
+          subtabs.appendChild(btn);
+        });
+
+        const tablesHolder = document.createElement("div");
+
+        // "All" table
+        const allTable = createTable(catKey, null);
+        allTable.classList.add("active");
+        tablesHolder.appendChild(allTable);
+
+        // Per-subtype tables
+        Object.keys(catInfo.subtypes).forEach((subKey) => {
+          const specificTable = createTable(catKey, subKey);
+          tablesHolder.appendChild(specificTable);
+        });
+
+        panel.appendChild(header);
+        panel.appendChild(subtabs);
+        panel.appendChild(tablesHolder);
+
+        container.appendChild(panel);
+      });
+    }
+
+    // Initialize
+    document.addEventListener("DOMContentLoaded", () => {
+      buildCategoryTabs();
+      buildCategoryPanels();
+      setActiveCategory("Monetary Partnerships");
+    });
+  </script>
+</body>
+</html>

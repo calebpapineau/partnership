@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>SSFC and SRFC Partnership Hub</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg-primary: #050814;
+      --bg-card: #090d20;
+      --bg-elevated: #0e1224;
+      --accent-green: #00b67a;
+      --accent-pink: #ff4f8b;
+      --accent-cyan: #3ddcff;
+      --accent-blue: #16a34a;
+      --text-main: #f5f7ff;
+      --text-muted: #9da4c6;
+      --border-soft: #1c2137;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.55);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top left, #151a3c 0, #020413 55%, #000 100%);
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    .hub-container {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ============== HEADER ============== */
+    header {
+      background: linear-gradient(180deg, rgba(20, 25, 50, 0.95), rgba(5, 8, 20, 0.9));
+      border-bottom: 1px solid var(--border-soft);
+      padding: 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+    }
+
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+      font-weight: 700;
+    }
+
+    .subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      max-width: 800px;
+    }
+
+    .header-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.04);
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .pill-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 0 3px rgba(0, 182, 122, 0.2);
+    }
+
+    /* ============== MAIN NAVIGATION ============== */
+    .nav-tabs {
+      background: rgba(4, 7, 22, 0.95);
+      border-bottom: 1px solid var(--border-soft);
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      align-items: center;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .nav-tabs .center-group {
+      margin: 0 auto;
+      display: flex;
+      gap: 4px;
+      align-items: center;
+    }
+
+    .nav-tabs::-webkit-scrollbar {
+      height: 4px;
+    }
+
+    .nav-tabs::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .nav-tabs::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    .nav-btn {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 12px 16px;
+      font-size: 13px;
+      cursor: pointer;
+      white-space: nowrap;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .nav-btn.active {
+      color: var(--text-main);
+      border-bottom-color: var(--accent-green);
+      background: rgba(0, 182, 122, 0.08);
+    }
+
+    .nav-icon {
+      font-size: 15px;
+    }
+
+    /* ============== MAIN CONTENT ============== */
+    .main-content {
+      flex: 1;
+      max-width: 1400px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px;
+    }
+
+    .view {
+      display: none;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .view.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .view-header {
+      margin-bottom: 20px;
+    }
+
+    .view-title {
+      font-size: 22px;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .view-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 900px;
+    }
+
+    /* ============== WELCOME VIEW ============== */
+    .welcome-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .welcome-card {
+      background: linear-gradient(135deg, rgba(20, 30, 60, 0.8), rgba(8, 12, 32, 0.9));
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .welcome-card:hover {
+      border-color: var(--accent-green);
+      box-shadow: 0 8px 20px rgba(0, 182, 122, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .card-icon {
+      font-size: 32px;
+      margin-bottom: 10px;
+      max-width: 100px;
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .card-description {
+      font-size: 12px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* ============== IFRAME CONTAINER ============== */
+    .iframe-container {
+      background: linear-gradient(135deg, rgba(20, 25, 50, 0.9), rgba(8, 12, 32, 0.95));
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-soft);
+      min-height: 600px;
+    }
+
+    .iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      min-height: 2000px;
+    }
+
+    /* ============== CONTENT SECTIONS ============== */
+    .content-section {
+      background: linear-gradient(135deg, rgba(20, 25, 50, 0.9), rgba(8, 12, 32, 0.95));
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow-soft);
+    }
+
+    .section-title {
+      font-size: 18px;
+      margin-bottom: 12px;
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-description {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    .assets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .asset-card {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 14px;
+      text-align: center;
+    }
+
+    .asset-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* ============== FOOTER ============== */
+    footer {
+      background: rgba(4, 7, 22, 0.95);
+      border-top: 1px solid var(--border-soft);
+      padding: 16px 20px;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: auto;
+    }
+
+    /* ============== RESPONSIVE ============== */
+    @media (max-width: 768px) {
+      header {
+        padding: 16px;
+      }
+
+      h1 {
+        font-size: 22px;
+      }
+
+      .subtitle {
+        font-size: 12px;
+      }
+
+      .main-content {
+        padding: 16px 12px;
+      }
+
+      .welcome-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .nav-tabs {
+        padding: 0 12px;
+        overflow-x: auto;
+      }
+
+      .nav-btn {
+        padding: 10px 12px;
+        font-size: 12px;
+      }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="hub-container">
+    <!-- HEADER -->
+    <header>
+      <div class="header-content">
+        <h1><img src="file:///C:/Users/cpapineau/OneDrive%20-%20Concentrix%20Corporation/Desktop/To%20Save/Reign___Sounders.png" height=30>   Seattle Sounders & Reign FC: Partnership Hub </h1>
+        <div class="subtitle">
+          A unified platform consolidating all partnership strategy assets, market analysis, and deal design tools
+          for Seattle Sounders FC, Seattle Reign FC, and the broader MLS and NWSL ecosystem. Built and Curated by Caleb Papineau
+        </div>
+        <div class="header-pills">
+          <div class="pill">
+            5 comprehensive interactive tools
+          </div>
+          <div class="pill">
+            MLS & NWSL partnership benchmarks
+          </div>
+          <div class="pill">
+            Real-time scenario planning
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="nav-tabs">
+      <div class="center-group">
+        <button class="nav-btn active" data-view="welcome">
+          HOME: PARTNERSHIP HUB
+        </button>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content">
+      <!-- WELCOME VIEW -->
+      <div id="welcome" class="view active">
+        <div class="view-header">
+          <div class="view-title">Welcome to the Partnership Hub</div>
+          <div class="view-description">
+            This consolidated platform brings together five powerful partnership planning and analysis tools.
+            Navigate using the tabs above or click a card below to explore each asset.
+          </div>
+        </div>
+
+        <div class="welcome-grid">
+          <div class="welcome-card" data-navigate="mls-meta">
+            <div class="card-icon">
+                <img src="https://images.mlssoccer.com/image/upload/v1736288054/assets/crest/MLS_CREST_1C_RGB_WHI_NO_BKGD_68x68_1_2_rwknik.png"  height="100" </src>
+           </div>
+            <div class="card-title">MLS Partnership Matrix</div>
+            <div class="card-description">
+              Club-by-club breakdown of partnership types across the MLS: monetary (jerseys, naming rights),
+              brand alignment, activations, and civic/community impact.
+            </div>
+          </div>
+
+          <div class="welcome-card" data-navigate="nwsl-matrix">
+            <div class="card-icon"><img src="https://images.squarespace-cdn.com/content/v1/6411f5fd54db5b2ae490165a/05a3d303-4004-4234-9fff-2867df5855bb/NWSL_logo.svg"  height="100" </src></div>
+            <div class="card-title">NWSL Partnership Matrix</div>
+            <div class="card-description">
+              Deep-dive into women's soccer partnerships: Seattle Reign FC featured prominently, alongside all NWSL
+              clubs with detailed deals, metrics, and strategic alignments.
+            </div>
+          </div>
+
+          <div class="welcome-card" data-navigate="scenario-sounders-reign">
+            <div class="card-icon">
+              <img src="C:\Users\cpapineau\OneDrive - Concentrix Corporation\Desktop\To Save\Reign___Sounders.png" height="100" alt="Seattle Sounders logo" /> 
+            </div>
+            <div class="card-title">Partnerships Scenario Planner</div>
+            <div class="card-description">
+              Interactive 2026 scenario planning for both Seattle clubs. Load presets (Baseline, Growth, Transformational)
+              and export customized partnership plans to Word documents.
+            </div>
+          </div>
+
+          <div class="welcome-card" data-navigate="deal-design">
+            <div class="card-icon"><img src="C:\Users\cpapineau\OneDrive - Concentrix Corporation\Desktop\To Save\SSFC - Deal Logo.png"  height="100" </src></div>
+            <div class="card-title">Individual Deal Design Matrix</div>
+            <div class="card-description">
+              Comprehensive deal design workbook covering overview, budgeting, rights & IP, assets & activations,
+              measurement, and a term sheet checklist for any partnership.
+            </div>
+          </div>
+
+          <div class="welcome-card" data-navigate="planning-board">
+            <div class="card-icon"><img src="C:\Users\cpapineau\OneDrive - Concentrix Corporation\Desktop\To Save\SSFC - target Logo.png" height="100" </src></div>
+            <div class="card-title">2026 Partnership Targets & Planning</div>
+            <div class="card-description">
+              Goal-setting and milestone tracking for both Sounders and Reign across partnership categories,
+              with customizable metrics and success criteria.
+            </div>
+          </div>
+        </div>
+
+        <div class="content-section" style="margin-top: 28px;">
+          <div class="section-title">📑 Quick Reference</div>
+          <div class="section-description">
+            All five tools are embedded below and can be accessed via the navigation tabs. Each tool is a fully
+            functional, standalone interactive platform with its own data, charts, and export capabilities.
+          </div>
+          <div class="assets-grid">
+            <div class="asset-card">
+              <div class="asset-label">🎯 Use Case</div>
+              <div style="font-size: 11px; margin-top: 4px; color: var(--text-main);">
+                Portfolio planning, competitive analysis, deal origination
+              </div>
+            </div>
+            <div class="asset-card">
+              <div class="asset-label">👥 Audience</div>
+              <div style="font-size: 11px; margin-top: 4px; color: var(--text-main);">
+                VP/Dir of Partnerships, Commercial teams, Ownership
+              </div>
+            </div>
+            <div class="asset-card">
+              <div class="asset-label">📊 Key Data</div>
+              <div style="font-size: 11px; margin-top: 4px; color: var(--text-main);">
+                Deal values, team/club rosters, category taxonomy, KPIs
+              </div>
+            </div>
+            <div class="asset-card">
+              <div class="asset-label">💾 Export</div>
+              <div style="font-size: 11px; margin-top: 4px; color: var(--text-main);">
+                Word docs, custom scenarios, printable reports
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MLS META-ANALYSIS VIEW -->
+      <div id="mls-meta" class="view">
+        <div class="view-header">
+          <div class="view-title">MLS Partnership Strategy</div>
+          <div class="view-description">
+            Comprehensive club-by-club breakdown of partnerships across the MLS, organized by partnership type:
+            Monetary (jersey, naming, media), Brand Alignment, Activations, and Civic Impact.
+            Navigate using tabs to explore different partnership categories.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="mls-iframe" title="MLS Partnership Strategy"></iframe>
+        </div>
+      </div>
+
+      <!-- NWSL MATRIX VIEW -->
+      <div id="nwsl-matrix" class="view">
+        <div class="view-header">
+          <div class="view-title">NWSL Partnership Strategy</div>
+          <div class="view-description">
+            Club-by-club view of key commercial, brand, activation, and civic partnerships across the National Women's Soccer League,
+            with Seattle Reign FC highlighted prominently. Use tabs to switch between high-level partnership categories.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="nwsl-iframe" title="NWSL Partnership Strategy Matrix"></iframe>
+        </div>
+      </div>
+
+      <!-- SCENARIO PLANNING VIEW -->
+      <div id="scenario-sounders-reign" class="view">
+        <div class="view-header">
+          <div class="view-title">2026 Partnership Scenario Planner</div>
+          <div class="view-description">
+            Interactive scenario planning hub for both Seattle clubs. Use preset buttons to load Baseline, Growth, or Transformational scenarios.
+            Customize metrics and export partnership plans directly to Word documents.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="scenario-iframe" title="2026 Partnership Scenario Planner"></iframe>
+        </div>
+      </div>
+
+      <!-- DEAL DESIGN VIEW -->
+      <div id="deal-design" class="view">
+        <div class="view-header">
+          <div class="view-title">Partnership Deal Design Matrix</div>
+          <div class="view-description">
+            Comprehensive internal planning board for designing and comparing partnership deals. Tabs cover Deal Overview,
+            Budget & Pricing, Rights & IP, Assets & Activations, Measurement & Outcomes, and Term Sheet Checklist.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="deal-iframe" title="Partnership Deal Design Matrix"></iframe>
+        </div>
+      </div>
+
+      <!-- PLANNING BOARD VIEW -->
+      <div id="planning-board" class="view">
+        <div class="view-header">
+          <div class="view-title">2026 Partnership Targets</div>
+          <div class="view-description">
+            Goal-setting and milestone tracking platform for Seattle Sounders FC and Seattle Reign FC.
+            Adjust revenue targets, success criteria, and key milestones for 2026 MLS and NWSL seasons.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="planning-iframe" title="2026 Partnership Planning Board"></iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+      <div>
+        <strong>Partnership Hub © 2025 – Built and Curated by Caleb Papineau</strong> | All five partner strategy tools consolidated into one unified platform.
+        <br />
+        <span style="color: rgba(255, 255, 255, 0.5);">
+          For internal use. Data reflects recent seasons; many contracts undisclosed where noted. Use for strategic planning only.
+        </span>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Navigation logic
+    const navButtons = document.querySelectorAll(".nav-btn");
+    const views = document.querySelectorAll(".view");
+    const welcomeCards = document.querySelectorAll(".welcome-card");
+
+    // Map of view IDs to HTML content (embedded inline)
+    const htmlContent = {
+      "mls-meta": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
+      "nwsl-matrix": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
+      "scenario-sounders-reign": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
+      "deal-design": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
+      "planning-board": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`
+    };
+
+    function switchView(viewId) {
+      // Hide all views
+      views.forEach(v => v.classList.remove("active"));
+      // Show selected view
+      const selectedView = document.getElementById(viewId);
+      if (selectedView) {
+        selectedView.classList.add("active");
+      }
+
+      // Update nav buttons
+      navButtons.forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.view === viewId);
+      });
+
+      // Scroll to top
+      window.scrollTo(0, 0);
+    }
+
+    navButtons.forEach(btn => {
+      btn.addEventListener("click", () => {
+        switchView(btn.dataset.view);
+      });
+    });
+
+    welcomeCards.forEach(card => {
+      card.addEventListener("click", () => {
+        const targetView = card.dataset.navigate;
+        switchView(targetView);
+      });
+    });
+
+    // Load embedded iframes with full HTML content
+    // Note: In production, you would use data URIs or blob URLs to embed the full tools
+    document.addEventListener("DOMContentLoaded", () => {
+      // Create data URIs for each embedded tool
+      // For now, we'll set up placeholder text indicating that the full tools would be embedded here
+
+      const iframes = {
+        "mls-iframe": "MLS Partnership Strategy Meta-Analysis",
+        "nwsl-iframe": "NWSL Partnership Strategy Matrix",
+        "scenario-iframe": "2026 Scenario Planning Tool",
+        "deal-iframe": "Deal Design Matrix",
+        "planning-iframe": "2026 Planning Board"
+      };
+
+      // Instead of inlining large HTML blobs (which requires heavy escaping),
+      // load each tool directly from the local files in the same folder.
+      // This is robust when opening the hub locally and keeps the hub file readable.
+      const toolFiles = {
+        "mls-iframe": "MLS Partner Programs v4.html",
+        "nwsl-iframe": "NWSL - Partner Programs v4.html",
+        "scenario-iframe": "Partnership Scenario Planning Tool.html",
+        "deal-iframe": "SFC SRFC Partnership Planning and Checklist 2026.html",
+        "planning-iframe": "SFC SRFC Partner Targets 2026.html"
+      };
+
+      Object.entries(toolFiles).forEach(([id, filename]) => {
+        const iframe = document.getElementById(id);
+        if (!iframe) return;
+        // Use relative path; file must be in same directory as the hub HTML
+        iframe.src = filename;
+      });
+    });
+  </script>
+</body>
+</html>

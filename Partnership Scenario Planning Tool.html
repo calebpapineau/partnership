@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Seattle Sounders FC & Seattle Reign FC – 2026 Partnership Scenario Planner</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --sounders-blue: #005596;
+      --sounders-green: #39a54a;
+      --reign-blue: #22274b;
+      --reign-gold: #c79a3e;
+      --bg: #071019;
+      --card-bg: #0f1822;
+      --card-alt-bg: #121e2b;
+      --border-subtle: #243246;
+      --text-main: #f3f7ff;
+      --text-muted: #a9b5cc;
+      --accent: #00b8ff;
+      --danger: #ff4d4d;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #18263a 0, #050810 48%, #020409 100%);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .brand-block {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .club-logo {
+      height: 72px;
+      width: auto;
+      filter: drop-shadow(0 4px 10px rgba(0,0,0,0.5));
+    }
+
+    .title-group h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      letter-spacing: 0.03em;
+    }
+
+    .title-group p {
+      margin: 4px 0 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+    }
+
+    .badge.sounders {
+      border-color: var(--sounders-green);
+      color: var(--sounders-green);
+    }
+
+    .badge.reign {
+      border-color: var(--reign-gold);
+      color: var(--reign-gold);
+    }
+
+    .card {
+      background: linear-gradient(145deg, var(--card-bg), var(--card-alt-bg));
+      border-radius: var(--radius-lg);
+      padding: 18px 18px 20px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .card + .card {
+      margin-top: 16px;
+    }
+
+    h2.section-title {
+      margin: 0 0 8px;
+      font-size: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    h2.section-title span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    ol.instructions {
+      margin: 8px 0 0 20px;
+      padding-left: 4px;
+      color: var(--text-muted);
+      font-size: 0.93rem;
+    }
+
+    .pill-note {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(0,184,255,0.08);
+      border: 1px solid rgba(0,184,255,0.3);
+      font-size: 0.8rem;
+      color: var(--text-main);
+    }
+
+    .club-tabs {
+      display: inline-flex;
+      background: rgba(6,10,19,0.9);
+      border-radius: var(--radius-pill);
+      padding: 4px;
+      border: 1px solid var(--border-subtle);
+      margin-bottom: 10px;
+    }
+
+    .club-tab {
+      border: none;
+      background: transparent;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .club-tab span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: transparent;
+    }
+
+    .club-tab.active {
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, rgba(0,184,255,0.35), rgba(0,0,0,0.9));
+      box-shadow: 0 0 12px rgba(0,184,255,0.5);
+    }
+
+    .club-tab.active[data-club="sounders"] span.dot {
+      background: var(--sounders-green);
+    }
+
+    .club-tab.active[data-club="reign"] span.dot {
+      background: var(--reign-gold);
+    }
+
+    .scenario-board {
+      display: none;
+      margin-top: 8px;
+    }
+
+    .scenario-board.active {
+      display: block;
+    }
+
+    .scenario-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 12px;
+    }
+
+    .scenario-header-left h3 {
+      margin: 0;
+      font-size: 1.1rem;
+    }
+
+    .scenario-header-left p {
+      margin: 4px 0 0;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .scenario-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.12);
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .scenario-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .preset-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .preset-btn {
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,0.22);
+      background: rgba(255,255,255,0.03);
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      color: var(--text-main);
+    }
+
+    .preset-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #001018;
+      box-shadow: 0 0 10px rgba(0,184,255,0.6);
+    }
+
+    .export-btn {
+      border-radius: var(--radius-pill);
+      border: none;
+      padding: 8px 14px;
+      font-size: 0.85rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #c7c3ab;
+      color: #001018;
+      font-weight: 600;
+      box-shadow: 0 10px 22px rgba(0,0,0,0.4);
+      white-space: nowrap;
+    }
+
+    .export-btn span.icon {
+      font-size: 0.95rem;
+    }
+
+    .layout-two-col {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 14px;
+      margin-top: 6px;
+    }
+
+    @media (max-width: 880px) {
+      .layout-two-col {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      header {
+        justify-content: center;
+      }
+    }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 8px 10px;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .field-grid label {
+      color: var(--text-muted);
+    }
+
+    .field-grid input,
+    .field-grid textarea {
+      width: 100%;
+      padding: 6px 8px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(3,8,16,0.8);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      resize: vertical;
+      min-height: 30px;
+    }
+
+    .field-grid textarea {
+      min-height: 52px;
+    }
+
+    .field-grid input[readonly] {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
+    }
+
+    .metrics-note {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    table.metrics-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 4px;
+      font-size: 0.8rem;
+    }
+
+    table.metrics-table th,
+    table.metrics-table td {
+      border: 1px solid rgba(255,255,255,0.09);
+      padding: 6px 6px;
+      vertical-align: top;
+    }
+
+    table.metrics-table th {
+      background: rgba(255,255,255,0.04);
+      text-align: left;
+      font-weight: 600;
+    }
+
+    table.metrics-table td input,
+    table.metrics-table td textarea {
+      width: 100%;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(3,8,16,0.9);
+      color: var(--text-main);
+      font-size: 0.78rem;
+      padding: 4px 5px;
+      resize: vertical;
+      min-height: 26px;
+    }
+
+    .footer-note {
+      margin-top: 14px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    a {
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header>
+      <div class="brand-block">
+        <img class="club-logo" src="C:\Users\cpapineau\OneDrive - Concentrix Corporation\Desktop\To Save\applemls.png" height=100 alt="Seattle Sounders FC logo">
+        <div class="title-group">
+          <h1>Planning Hub</h1>
+          <p>Seattle Sounders FC &amp; Seattle Reign FC &mdash; integrated commercial, purpose and community planning.</p>
+
+        </div>
+      </div>
+    </header>
+
+    <section class="card">
+      <h2 class="section-title"><span class="dot"></span>How to use this board</h2>
+      <ol class="instructions">
+        <li>Select **Sounders** or **Reign** below to open the relevant planning board.</li>
+        <li>Use the preset buttons (Baseline, Growth, Transformational) to load recommended 2026 targets and example metrics.</li>
+        <li>Customize topline goals (revenue, # of partners, strategic themes) and adjust the per-category metrics in the table.</li>
+        <li>When you’re ready, click **Export Scenario to Word** to download a `.doc` file formatted as an official club scenario memo. The file name includes the club, season, and scenario code.</li>
+        <li>Use separate Word exports for ExCo review, partner-specific deal design, and board reporting.</li>
+      </ol>
+      <div class="pill-note">
+        Tip: Treat each scenario as a “portfolio view” of all partnership types in our taxonomy &mdash; cash, contra, brand & content, community, digital, and B2B.
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="club-tabs">
+        <button class="club-tab active" data-club="sounders">
+          <span class="dot"></span> Seattle Sounders FC
+        </button>
+        <button class="club-tab" data-club="reign">
+          <span class="dot"></span> Seattle Reign FC
+        </button>
+      </div>
+
+      <!-- SOUNDERS BOARD -->
+      <div id="sounders-board" class="scenario-board active" data-club="sounders">
+        <div class="scenario-header">
+          <div class="scenario-header-left">
+            <h3>Seattle Sounders FC &mdash; 2026 Partnership Scenario</h3>
+            <p>MLB benchmarked (setting a high standard), MLS top-quartile ambition across all partner taxonomy types.</p>
+          </div>
+          <div class="scenario-pill">
+            Club: <strong>Sounders</strong> · Season: <strong>2026</strong>
+          </div>
+        </div>
+
+        <div class="scenario-controls">
+          <div class="preset-buttons">
+            <span style="font-size:0.8rem;color:var(--text-muted);margin-right:4px;">Load preset:</span>
+            <button class="preset-btn" data-club="sounders" data-scenario="S1">SS-01 Baseline Sustain</button>
+            <button class="preset-btn" data-club="sounders" data-scenario="S2">SS-02 Growth Upside</button>
+            <button class="preset-btn" data-club="sounders" data-scenario="S3">SS-03 Transformational</button>
+          </div>
+          <button class="export-btn" data-club="sounders">
+            <span class="icon">⬇</span> Export Scenario to Word
+          </button>
+        </div>
+
+        <div class="layout-one-col">
+          <div>
+            <div class="field-grid">
+              <label for="sounders-year">Season</label>
+              <input id="sounders-year" type="number" value="2026" readonly>
+
+              <label for="sounders-scenario-code">Scenario code</label>
+              <input id="sounders-scenario-code" type="text" placeholder="e.g., SS-01">
+
+              <label for="sounders-scenario-name">Scenario name</label>
+              <input id="sounders-scenario-name" type="text" placeholder="Baseline sustain / Transformational, etc.">
+
+              <label for="sounders-total-revenue">Total partnership revenue target (USD m)</label>
+              <input id="sounders-total-revenue" type="number" step="0.1" min="0">
+
+              <label for="sounders-active-partners">Target # of active partners</label>
+              <input id="sounders-active-partners" type="number" step="1" min="0">
+
+              <label for="sounders-avg-term">Weighted average deal term (years)</label>
+              <input id="sounders-avg-term" type="number" step="0.1" min="0">
+
+              <label for="sounders-theme">Strategic theme / headline</label>
+              <textarea id="sounders-theme" placeholder="One line that describes the posture of this scenario."></textarea>
+
+              <label for="sounders-notes">Key assumptions &amp; risks</label>
+              <textarea id="sounders-notes" placeholder="Attendance assumptions, media rights trends, capex, roster storylines, etc."></textarea>
+            </div>
+            
+          </div>
+
+          <div class="scenario-header-left">
+            <h3>Seattle Sounders FC &mdash; 2026 Partnership Details</h3>
+            <p>Number of deals, revenue targets, and partnership value estimates for a specific scenario.</p>
+          </div>
+          <div class="metrics-note">
+              All financial figures below are entered in **USD millions** for 2026 seasonized impact.
+            </div>
+          <div>
+            <table class="metrics-table">
+              <thead>
+              <tr>
+                <th style="width:26%;">Partnership category (taxonomy)</th>
+                <th style="width:7%;"># Deals</th>
+                <th style="width:12%;">Club Revenue Target (USD m)</th>
+                <th style="width:12%;">Est. Partner Value (USD m)</th>
+                <th>Primary success metrics (club &amp; partner)</th>
+              </tr>
+              </thead>
+              <tbody id="sounders-category-body">
+              <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          Scenario exports include this data plus derived KPIs (revenue per partner, mix by category) for review with Ownership, Business Ops, and Football Leadership.
+        </div>
+      </div>
+
+      <!-- REIGN BOARD -->
+      <div id="reign-board" class="scenario-board" data-club="reign">
+        <div class="scenario-header">
+          <div class="scenario-header-left">
+            <h3>Seattle Reign FC &mdash; 2026 Partnership Scenario</h3>
+            <p>Women’s football-first, purpose-led portfolio centered on equity, community and global women’s sports.</p>
+          </div>
+          <div class="scenario-pill">
+            Club: <strong>Reign</strong> · Season: <strong>2026</strong>
+          </div>
+        </div>
+
+        <div class="scenario-controls">
+          <div class="preset-buttons">
+            <span style="font-size:0.8rem;color:var(--text-muted);margin-right:4px;">Load preset:</span>
+            <button class="preset-btn" data-club="reign" data-scenario="R1">SR-01 Core &amp; Purpose</button>
+            <button class="preset-btn" data-club="reign" data-scenario="R2">SR-02 Growth &amp; Equity</button>
+            <button class="preset-btn" data-club="reign" data-scenario="R3">SR-03 Transform the Game</button>
+          </div>
+          <button class="export-btn" data-club="reign">
+            <span class="icon">⬇</span> Export Scenario to Word
+          </button>
+        </div>
+
+        <div class="layout-one-col">
+          <div>
+            <div class="field-grid">
+              <label for="reign-year">Season</label>
+              <input id="reign-year" type="number" value="2026" readonly>
+
+              <label for="reign-scenario-code">Scenario code</label>
+              <input id="reign-scenario-code" type="text" placeholder="e.g., SR-01">
+
+              <label for="reign-scenario-name">Scenario name</label>
+              <input id="reign-scenario-name" type="text" placeholder="Core & Purpose / Transform the Game, etc.">
+
+              <label for="reign-total-revenue">Total partnership revenue target (USD m)</label>
+              <input id="reign-total-revenue" type="number" step="0.1" min="0">
+
+              <label for="reign-active-partners">Target # of active partners</label>
+              <input id="reign-active-partners" type="number" step="1" min="0">
+
+              <label for="reign-avg-term">Weighted average deal term (years)</label>
+              <input id="reign-avg-term" type="number" step="0.1" min="0">
+
+              <label for="reign-theme">Strategic theme / headline</label>
+              <textarea id="reign-theme" placeholder="Positioning for women’s football, impact, and commercial growth."></textarea>
+
+              <label for="reign-notes">Key assumptions &amp; risks</label>
+              <textarea id="reign-notes" placeholder="League media deals, joint Sounders/Reign assets, equity & impact commitments, etc."></textarea>
+            </div>
+            
+          </div>
+        <div class="scenario-header-left">
+            <h3>Seattle Reign FC &mdash; 2026 Partnership Details</h3>
+            <p>Number of deals, revenue targets, and partnership value estimates for a specific scenario.</p>
+        </div>
+        <div class="metrics-note">
+              All financial figures below are entered in **USD millions** for 2026 seasonized impact.
+        </div>
+
+        <div>
+           
+            <table class="metrics-table">
+              <thead>
+              <tr>
+                <th style="width:26%;">Partnership category (taxonomy)</th>
+                <th style="width:7%;"># deals</th>
+                <th style="width:12%;">Club revenue target (USD m)</th>
+                <th style="width:12%;">Est. partner value (USD m)</th>
+                <th>Primary success metrics (club &amp; partner)</th>
+              </tr>
+              </thead>
+              <tbody id="reign-category-body">
+              <!-- rows injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="footer-note">
+          Reign scenarios are designed to be additive to Sounders plans &mdash; especially for joint storytelling, double-headers at Lumen Field, and shared training campus assets.
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    // Shared partnership taxonomy for both clubs
+    const partnershipCategories = [
+      { id: "principal", label: "Front-of-jersey / Principal partner" },
+      { id: "secondary_kit", label: "Sleeve, back-of-kit & secondary jersey assets" },
+      { id: "stadium", label: "Stadium naming, stands, matchday & hospitality assets" },
+      { id: "media_content", label: "Media, content, storytelling & IP collaborations" },
+      { id: "digital_data", label: "Digital, data, fan engagement & AI products" },
+      { id: "community_purpose", label: "Community, purpose & civic impact (RISE / foundation)" },
+      { id: "youth_pathways", label: "Youth development, academies, grassroots tournaments" },
+      { id: "b2b_enterprise", label: "B2B / enterprise platforms & regional business councils" },
+      { id: "international", label: "International, tours, tournaments & global partners" },
+      { id: "emerging", label: "Emerging categories (sustainability, Web3, tech, etc.)" }
+    ];
+
+    // Scenario presets (USD millions, approximate)
+    const soundersPresets = {
+      S1: {
+        code: "SS-01",
+        name: "Baseline Sustain",
+        totalRevenue: 40,
+        activePartners: 42,
+        avgTerm: 3.0,
+        theme: "Protect core revenues, renew key anchor deals, and selectively upgrade categories with strong brand fit.",
+        notes: "Assumes steady attendance, current media landscape, and 95% renewal on expiring majors.",
+        categories: {
+          principal:        { deals: 1, clubRev: 8, partnerVal: 30, kpis: "Global brand lift, jersey sales, broadcast exposure, digital impressions." },
+          secondary_kit:    { deals: 2, clubRev: 4, partnerVal: 12, kpis: "Secondary awareness, B2B pipeline, social media reach." },
+          stadium:          { deals: 5, clubRev: 7, partnerVal: 18, kpis: "Hospitality utilization, NPS of guests, premium renewal rates." },
+          media_content:    { deals: 5, clubRev: 4.5, partnerVal: 10, kpis: "Video views, watch time, co-branded campaign lift." },
+          digital_data:     { deals: 4, clubRev: 3.5, partnerVal: 9, kpis: "App engagement, MAUs, opted-in data, CRM growth." },
+          community_purpose:{ deals: 6, clubRev: 2.2, partnerVal: 7, kpis: "Community reach, impact stories, employee engagement." },
+          youth_pathways:   { deals: 4, clubRev: 2.5, partnerVal: 6, kpis: "Participants, pathway conversion, retention in programs." },
+          b2b_enterprise:   { deals: 6, clubRev: 5, partnerVal: 14, kpis: "Pipeline influenced, deals closed with club introductions." },
+          international:    { deals: 2, clubRev: 1.5, partnerVal: 5, kpis: "Global audience, tour attendance, streaming metrics." },
+          emerging:         { deals: 3, clubRev: 1.8, partnerVal: 4, kpis: "Innovation pilots, earned media, proof-of-concept success." }
+        }
+      },
+      S2: {
+        code: "SS-02",
+        name: "Growth Upside",
+        totalRevenue: 48,
+        activePartners: 48,
+        avgTerm: 3.4,
+        theme: "Layer new categories (tech, sustainability, AI) while upgrading key assets into multi-market, multi-property partnerships.",
+        notes: "Assumes uplift from expanded media footprint and new premium inventory at Longacres & Lumen Field.",
+        categories: {
+          principal:        { deals: 1, clubRev: 9.5, partnerVal: 34, kpis: "Brand preference, global reach, e-commerce sales." },
+          secondary_kit:    { deals: 2, clubRev: 5, partnerVal: 14, kpis: "Incremental awareness, sentiment, targeted campaigns." },
+          stadium:          { deals: 6, clubRev: 8.5, partnerVal: 20, kpis: "Sell-through of suites, naming-zone recall, corporate NPS." },
+          media_content:    { deals: 6, clubRev: 5.5, partnerVal: 12, kpis: "Series completion rates, co-branded content attribution." },
+          digital_data:     { deals: 5, clubRev: 4.5, partnerVal: 11, kpis: "1P data growth, personalization uplift, click-to-lead." },
+          community_purpose:{ deals: 7, clubRev: 2.8, partnerVal: 8, kpis: "Impact metrics against SDGs, employee volunteering hours." },
+          youth_pathways:   { deals: 4, clubRev: 3, partnerVal: 7, kpis: "Scholarships funded, academy conversion, tournament scale." },
+          b2b_enterprise:   { deals: 7, clubRev: 6.5, partnerVal: 15, kpis: "Influenced ARR, partner council health, account expansion." },
+          international:    { deals: 3, clubRev: 2.5, partnerVal: 6, kpis: "Tour revenue, international fanbase growth, rights fees." },
+          emerging:         { deals: 4, clubRev: 2.7, partnerVal: 6, kpis: "Pilot-to-scale conversion, PR value, innovation KPIs." }
+        }
+      },
+      S3: {
+        code: "SS-03",
+        name: "Transformational Platform",
+        totalRevenue: 55,
+        activePartners: 52,
+        avgTerm: 3.8,
+        theme: "Position Sounders as the leading global football innovation & community club in North America.",
+        notes: "Assumes one new transformational multi-asset deal and an uplift in league & club valuations.",
+        categories: {
+          principal:        { deals: 1, clubRev: 11, partnerVal: 40, kpis: "Multi-market brand and revenue transformation outcomes." },
+          secondary_kit:    { deals: 3, clubRev: 6, partnerVal: 16, kpis: "Portfolio halo effect, incremental consideration." },
+          stadium:          { deals: 6, clubRev: 9.5, partnerVal: 22, kpis: "Utilization of Longacres & Lumen ecosystems." },
+          media_content:    { deals: 7, clubRev: 6.2, partnerVal: 14, kpis: "Original series, shoulder programming, docu-style reach." },
+          digital_data:     { deals: 6, clubRev: 5.5, partnerVal: 13, kpis: "AI-driven CX uplift, fan lifetime value, tokenization." },
+          community_purpose:{ deals: 8, clubRev: 3.4, partnerVal: 9, kpis: "Lives impacted, equity outcomes, city-level reputation." },
+          youth_pathways:   { deals: 5, clubRev: 3.6, partnerVal: 8.5, kpis: "Pro pathway stories, scholarships, grassroots expansion." },
+          b2b_enterprise:   { deals: 8, clubRev: 7.5, partnerVal: 17, kpis: "Board-level relationships, transformational deals closed." },
+          international:    { deals: 4, clubRev: 3.4, partnerVal: 8, kpis: "New markets opened, partner geo-expansion metrics." },
+          emerging:         { deals: 5, clubRev: 3.9, partnerVal: 7.5, kpis: "Category-defining pilots, awards, and strategic IP gains." }
+        }
+      }
+    };
+
+    const reignPresets = {
+      R1: {
+        code: "SR-01",
+        name: "Core & Purpose",
+        totalRevenue: 10,
+        activePartners: 22,
+        avgTerm: 2.8,
+        theme: "Stabilize Reign as a premier NWSL club with a purpose-led, local and regional partner base.",
+        notes: "Assumes continued double-header strategy with Sounders and stable NWSL media environment.",
+        categories: {
+          principal:        { deals: 1, clubRev: 2.5, partnerVal: 7, kpis: "Front-of-jersey visibility, women’s sports equity metrics." },
+          secondary_kit:    { deals: 1, clubRev: 1.0, partnerVal: 2.5, kpis: "Awareness with priority segments, co-branded content." },
+          stadium:          { deals: 3, clubRev: 1.4, partnerVal: 3, kpis: "Hospitality utilization, local business impact." },
+          media_content:    { deals: 3, clubRev: 0.9, partnerVal: 2.2, kpis: "Storytelling around players, representation, and community." },
+          digital_data:     { deals: 2, clubRev: 0.8, partnerVal: 2, kpis: "NWSL+ and streaming engagement, CRM growth." },
+          community_purpose:{ deals: 4, clubRev: 1.0, partnerVal: 3, kpis: "Girls’ participation, mentorship programs, DEI impact." },
+          youth_pathways:   { deals: 2, clubRev: 0.8, partnerVal: 1.8, kpis: "Academy pathways, local club partnerships." },
+          b2b_enterprise:   { deals: 3, clubRev: 1.6, partnerVal: 3.5, kpis: "Corporate engagement, leadership programs, B2B pipeline." },
+          international:    { deals: 1, clubRev: 0.6, partnerVal: 1.5, kpis: "Global women’s football collaborations, tour opportunities." },
+          emerging:         { deals: 1, clubRev: 0.4, partnerVal: 1, kpis: "Pilot collaborations in equality tech, health, and performance." }
+        }
+      },
+      R2: {
+        code: "SR-02",
+        name: "Growth & Equity",
+        totalRevenue: 14,
+        activePartners: 26,
+        avgTerm: 3.1,
+        theme: "Grow revenue while explicitly tying deals to women’s sports equity and impact metrics.",
+        notes: "Assumes step-change in NWSL visibility and co-selling with Sounders in new categories.",
+        categories: {
+          principal:        { deals: 1, clubRev: 3.2, partnerVal: 8.5, kpis: "Equity-linked KPIs, global inclusion campaigns." },
+          secondary_kit:    { deals: 2, clubRev: 1.5, partnerVal: 3.2, kpis: "Category differentiation, pipeline growth, brand lift." },
+          stadium:          { deals: 3, clubRev: 1.8, partnerVal: 3.8, kpis: "Attendance at women’s matches, premium mix vs. Sounders." },
+          media_content:    { deals: 4, clubRev: 1.3, partnerVal: 3, kpis: "Docu-style features, shoulder content, view-through rates." },
+          digital_data:     { deals: 3, clubRev: 1.1, partnerVal: 2.6, kpis: "Streaming hours, fan database growth, engagement." },
+          community_purpose:{ deals: 5, clubRev: 1.3, partnerVal: 3.3, kpis: "Equity outcomes, scholarships, community awards." },
+          youth_pathways:   { deals: 3, clubRev: 1.0, partnerVal: 2.4, kpis: "Girls’ participation, academy pipeline, talent ID." },
+          b2b_enterprise:   { deals: 4, clubRev: 1.9, partnerVal: 4, kpis: "Executive engagement, women-in-leadership KPIs." },
+          international:    { deals: 2, clubRev: 0.9, partnerVal: 2.2, kpis: "International tournaments, cross-club exchanges." },
+          emerging:         { deals: 2, clubRev: 1.0, partnerVal: 2, kpis: "New segments (health, fintech, tech4good) activated." }
+        }
+      },
+      R3: {
+        code: "SR-03",
+        name: "Transform the Game",
+        totalRevenue: 18,
+        activePartners: 30,
+        avgTerm: 3.5,
+        theme: "Position Reign as a global flagship for women’s football innovation and purpose.",
+        notes: "Assumes at least one transformational deal and increased cross-property packaging with Sounders & Longacres.",
+        categories: {
+          principal:        { deals: 1, clubRev: 4.0, partnerVal: 10, kpis: "Global equity narrative, measurable social outcomes." },
+          secondary_kit:    { deals: 2, clubRev: 2.0, partnerVal: 4.5, kpis: "Visibility in new markets, affinity shifts." },
+          stadium:          { deals: 3, clubRev: 2.2, partnerVal: 4.8, kpis: "Record attendances, premium mix, fan experience scores." },
+          media_content:    { deals: 5, clubRev: 1.9, partnerVal: 3.8, kpis: "Global storytelling formats, awards, and critical acclaim." },
+          digital_data:     { deals: 3, clubRev: 1.5, partnerVal: 3.3, kpis: "Always-on community, retention, DTC revenue." },
+          community_purpose:{ deals: 6, clubRev: 1.8, partnerVal: 4.3, kpis: "Long-term community programs & measurable life outcomes." },
+          youth_pathways:   { deals: 3, clubRev: 1.4, partnerVal: 3.2, kpis: "Professional pathways, college placements, coach education." },
+          b2b_enterprise:   { deals: 5, clubRev: 2.2, partnerVal: 4.7, kpis: "Enterprise transformation stories anchored in women’s sport." },
+          international:    { deals: 2, clubRev: 1.4, partnerVal: 3.2, kpis: "Presence in key markets, co-owned tournaments." },
+          emerging:         { deals: 3, clubRev: 1.6, partnerVal: 3.5, kpis: "Pioneering impact or tech initiatives tied to women’s game." }
+        }
+      }
+    };
+
+    // Build metric rows for each club
+    function buildCategoryRows(club) {
+      const tbody = document.getElementById(club + "-category-body");
+      tbody.innerHTML = "";
+      partnershipCategories.forEach(cat => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${cat.label}</td>
+          <td><input type="number" min="0" step="1" id="${club}_${cat.id}_deals"></td>
+          <td><input type="number" min="0" step="0.1" id="${club}_${cat.id}_clubRev"></td>
+          <td><input type="number" min="0" step="0.1" id="${club}_${cat.id}_partnerVal"></td>
+          <td><textarea id="${club}_${cat.id}_kpis" placeholder="Key KPIs for club & partner."></textarea></td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applyPreset(club, scenarioKey) {
+      const presets = club === "sounders" ? soundersPresets : reignPresets;
+      const preset = presets[scenarioKey];
+      if (!preset) return;
+
+      // Topline fields
+      document.getElementById(club + "-scenario-code").value = preset.code;
+      document.getElementById(club + "-scenario-name").value = preset.name;
+      document.getElementById(club + "-total-revenue").value = preset.totalRevenue;
+      document.getElementById(club + "-active-partners").value = preset.activePartners;
+      document.getElementById(club + "-avg-term").value = preset.avgTerm;
+      document.getElementById(club + "-theme").value = preset.theme;
+      document.getElementById(club + "-notes").value = preset.notes;
+
+      // Category rows
+      partnershipCategories.forEach(cat => {
+        const data = preset.categories[cat.id] || { deals: "", clubRev: "", partnerVal: "", kpis: "" };
+        document.getElementById(`${club}_${cat.id}_deals`).value = data.deals ?? "";
+        document.getElementById(`${club}_${cat.id}_clubRev`).value = data.clubRev ?? "";
+        document.getElementById(`${club}_${cat.id}_partnerVal`).value = data.partnerVal ?? "";
+        document.getElementById(`${club}_${cat.id}_kpis`).value = data.kpis ?? "";
+      });
+
+      // Highlight active preset button
+      document.querySelectorAll(`.preset-btn[data-club="${club}"]`).forEach(btn => {
+        btn.classList.toggle("active", btn.getAttribute("data-scenario") === scenarioKey);
+      });
+    }
+
+    function switchClubBoard(club) {
+      document.querySelectorAll(".club-tab").forEach(tab => {
+        tab.classList.toggle("active", tab.getAttribute("data-club") === club);
+      });
+      document.querySelectorAll(".scenario-board").forEach(board => {
+        board.classList.toggle("active", board.getAttribute("data-club") === club);
+      });
+    }
+
+    function collectScenarioData(club) {
+      const year = document.getElementById(club + "-year").value;
+      const code = document.getElementById(club + "-scenario-code").value || "";
+      const name = document.getElementById(club + "-scenario-name").value || "";
+      const totalRevenue = document.getElementById(club + "-total-revenue").value || "";
+      const activePartners = document.getElementById(club + "-active-partners").value || "";
+      const avgTerm = document.getElementById(club + "-avg-term").value || "";
+      const theme = document.getElementById(club + "-theme").value || "";
+      const notes = document.getElementById(club + "-notes").value || "";
+
+      const categories = partnershipCategories.map(cat => ({
+        id: cat.id,
+        label: cat.label,
+        deals: document.getElementById(`${club}_${cat.id}_deals`).value || "",
+        clubRev: document.getElementById(`${club}_${cat.id}_clubRev`).value || "",
+        partnerVal: document.getElementById(`${club}_${cat.id}_partnerVal`).value || "",
+        kpis: document.getElementById(`${club}_${cat.id}_kpis`).value || ""
+      }));
+
+      return {
+        club,
+        year,
+        code,
+        name,
+        totalRevenue,
+        activePartners,
+        avgTerm,
+        theme,
+        notes,
+        categories
+      };
+    }
+
+    function exportScenarioToWord(club) {
+      const data = collectScenarioData(club);
+      const today = new Date();
+      const dateStr = today.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" });
+
+      const clubName = club === "sounders" ? "Seattle Sounders FC" : "Seattle Reign FC";
+      const primaryColor = club === "sounders" ? "#005596" : "#22274b";
+      const secondaryColor = club === "sounders" ? "#39a54a" : "#c79a3e";
+      const logoUrl = club === "sounders"
+        ? "https://images.mlssoccer.com/image/upload/assets/logos/SEA.svg"
+        : "https://images.squarespace-cdn.com/content/v1/65823d9021b93e044e237270/5001384e-e1ec-43a8-adf5-b1cb25229ae0/SRFC-primary.png";
+
+      const scenarioLabel = data.code || (club === "sounders" ? "SS-X" : "SR-X");
+      const safeScenarioLabel = scenarioLabel.replace(/[^\w\-]/g, "_") || "Scenario";
+
+      // Build HTML content for Word (simple, Word-friendly)
+      let tableRows = "";
+      data.categories.forEach(cat => {
+        tableRows += `
+          <tr>
+            <td>${cat.label}</td>
+            <td style="text-align:center;">${cat.deals}</td>
+            <td style="text-align:right;">${cat.clubRev}</td>
+            <td style="text-align:right;">${cat.partnerVal}</td>
+            <td>${cat.kpis}</td>
+          </tr>`;
+      });
+
+      const docHTML = `
+<html xmlns:o="urn:schemas-microsoft-com:office:office"
+      xmlns:w="urn:schemas-microsoft-com:office:word"
+      xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+  <meta charset="utf-8">
+  <title>${clubName} ${data.year} Partnership Scenario ${scenarioLabel}</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; }
+    .header-band {
+      background: ${primaryColor};
+      color: #ffffff;
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+    }
+    .header-band img { height: 52px; margin-right: 16px; }
+    .header-band h1 { margin: 0; font-size: 20pt; }
+    .header-band p { margin: 2px 0 0; font-size: 10pt; }
+    .meta { margin: 14px 18px; font-size: 10pt; }
+    .meta strong { color: ${primaryColor}; }
+    h2 { margin: 18px 18px 6px; color: ${primaryColor}; border-bottom: 1px solid ${primaryColor}; padding-bottom: 4px; }
+    table { border-collapse: collapse; width: 96%; margin: 0 18px 12px; font-size: 9.5pt; }
+    th, td { border: 1px solid #cccccc; padding: 4px 5px; vertical-align: top; }
+    th { background: #f0f3f8; }
+    .small { font-size: 8.5pt; color: #555555; margin: 0 18px 8px; }
+  </style>
+</head>
+<body>
+  <div class="header-band">
+    <img src="${logoUrl}" height=72 width=72 alt="${clubName} logo">
+    <div>
+      <h1>${clubName} &mdash; ${data.year} Partnership Scenario</h1>
+      <p>Scenario: <strong>${scenarioLabel}</strong> &nbsp;|&nbsp; Generated: ${dateStr}</p>
+    </div>
+  </div>
+
+  <div class="meta">
+    <p><strong>Scenario name:</strong> ${data.name || ""}</p>
+    <p><strong>Strategic theme:</strong> ${data.theme || ""}</p>
+    <p><strong>Topline targets:</strong></p>
+    <ul>
+      <li>Total partnership revenue target: <strong>${data.totalRevenue || ""}m USD</strong></li>
+      <li>Target number of active partners: <strong>${data.activePartners || ""}</strong></li>
+      <li>Weighted average deal term: <strong>${data.avgTerm || ""} years</strong></li>
+    </ul>
+  </div>
+
+  <h2>Category Breakdown (All Partnership Types)</h2>
+  <table>
+    <tr>
+      <th style="width:28%;">Partnership category</th>
+      <th style="width:10%;"># deals</th>
+      <th style="width:16%;">Club revenue target<br>(USD m)</th>
+      <th style="width:16%;">Estimated partner value<br>(USD m)</th>
+      <th>Primary success metrics</th>
+    </tr>
+    ${tableRows}
+  </table>
+
+  <h2>Assumptions, Risks &amp; Notes</h2>
+  <p class="small">${data.notes || "Add narrative on assumptions, risk factors, and any dependencies with league or venue-level decisions."}</p>
+
+  <p class="small"><strong>Internal use only.</strong> This document is a scenario planning artifact for ${clubName} ${data.year} partnership strategy and does not represent a final commercial commitment.</p>
+</body>
+</html>
+      `;
+
+      const blob = new Blob(["\ufeff", docHTML], { type: "application/msword" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${clubName.replace(/\s+/g, "_")}_Partnership_${data.year}_${safeScenarioLabel}.doc`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      // Build tables
+      buildCategoryRows("sounders");
+      buildCategoryRows("reign");
+
+      // Default presets: Baseline for both
+      applyPreset("sounders", "S1");
+      applyPreset("reign", "R1");
+
+      // Club tab switching
+      document.querySelectorAll(".club-tab").forEach(tab => {
+        tab.addEventListener("click", () => {
+          const club = tab.getAttribute("data-club");
+          switchClubBoard(club);
+        });
+      });
+
+      // Preset buttons
+      document.querySelectorAll(".preset-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const club = btn.getAttribute("data-club");
+          const scenario = btn.getAttribute("data-scenario");
+          applyPreset(club, scenario);
+        });
+      });
+
+      // Export buttons
+      document.querySelectorAll(".export-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const club = btn.getAttribute("data-club");
+          exportScenarioToWord(club);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
