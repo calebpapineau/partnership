@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>MLS Partnership Strategies - Meta Analysis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #050814;
+      --bg-card: #090d20;
+      --bg-soft: #0f152c;
+      --accent: #00b67a;
+      --accent-soft: rgba(0, 182, 122, 0.18);
+      --accent-strong: rgba(0, 182, 122, 0.45);
+      --border-soft: #1c2137;
+      --text-main: #f5f7ff;
+      --text-muted: #9da4c4;
+      --text-subtle: #7d85a5;
+      --text-header: #e9edff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #151a3c 0, #020413 55%, #000 100%);
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 26px;
+      letter-spacing: 0.03em;
+    }
+
+    .subtitle {
+      margin: 0 0 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 920px;
+    }
+
+    .subtitle strong { color: var(--text-header); }
+
+    .subtitle a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+    .subtitle a:hover { text-decoration: underline; }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+      font-size: 11px;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-soft);
+      background: radial-gradient(circle at top left, #272f52, #050814);
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(0, 182, 122, 0.3);
+    }
+
+    .tabs {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+      border-radius: 999px;
+      padding: 4px;
+      background: rgba(4, 7, 22, 0.9);
+      border: 1px solid var(--border-soft);
+    }
+
+    .tab-btn {
+      border: none;
+      outline: none;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      cursor: pointer;
+      color: var(--text-muted);
+      background: transparent;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+    }
+
+    .tab-btn span.dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: transparent;
+      border: 1px solid #444a6a;
+    }
+
+    .tab-btn.active {
+      color: var(--text-main);
+      background: radial-gradient(circle at top left, #283257, #050814);
+      box-shadow: 0 0 0 1px var(--accent-soft);
+    }
+
+    .tab-btn.active span.dot {
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 10px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .panel-header strong { color: var(--text-header); }
+
+    .panel-header small {
+      display: block;
+      color: var(--text-subtle);
+      margin-top: 4px;
+    }
+
+    .kpi-chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: rgba(0, 182, 122, 0.08);
+      border: 1px solid var(--accent-soft);
+      color: var(--accent);
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .kpi-chip span.dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .table-shell {
+      background: radial-gradient(circle at top left, #202645, #040615);
+      border-radius: 18px;
+      border: 1px solid var(--border-soft);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.8);
+      padding: 10px;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 1100px;
+      font-size: 11px;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      z-index: 2;
+    }
+
+    thead tr {
+      background: linear-gradient(
+        180deg,
+        rgba(5, 8, 24, 0.98),
+        rgba(5, 8, 24, 0.98)
+      );
+    }
+
+    th, td {
+      padding: 8px 7px;
+      border-bottom: 1px solid #151a2b;
+      vertical-align: top;
+    }
+
+    th {
+      font-weight: 600;
+      color: var(--text-header);
+    }
+
+    th.team-col {
+      width: 230px;
+      position: sticky;
+      left: 0;
+      z-index: 3;
+      background: linear-gradient(
+        180deg,
+        rgba(8, 11, 28, 0.96),
+        rgba(4, 6, 21, 0.98)
+      );
+      box-shadow: 6px 0 16px rgba(0, 0, 0, 0.8);
+    }
+
+    td.team-col {
+      position: sticky;
+      left: 0;
+      z-index: 1;
+      background: linear-gradient(
+        180deg,
+        rgba(8, 11, 28, 0.94),
+        rgba(4, 6, 21, 0.96)
+      );
+      box-shadow: 6px 0 16px rgba(0, 0, 0, 0.7);
+    }
+
+    tbody tr:nth-child(odd) td:not(.team-col) {
+      background: rgba(3, 6, 20, 0.9);
+    }
+    tbody tr:nth-child(even) td:not(.team-col) {
+      background: rgba(8, 12, 35, 0.8);
+    }
+    tbody tr:hover td:not(.team-col) {
+      background: rgba(19, 29, 70, 0.95);
+    }
+
+    .team-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .team-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 20% 0, rgba(255,255,255,0.16), transparent 60%),
+                  radial-gradient(circle at 80% 120%, rgba(0,182,122,0.4), transparent 55%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.1);
+      flex-shrink: 0;
+    }
+
+    .team-logo img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .team-name {
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .team-meta {
+      font-size: 9px;
+      color: var(--text-subtle);
+      margin-top: 1px;
+    }
+
+    .subtype-name {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 3px;
+    }
+
+    .subtype-desc {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .cell-partner {
+      margin-bottom: 2px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    .cell-partner a {
+      color: var(--text-main);
+      text-decoration: none;
+      border-bottom: 1px dotted rgba(0, 182, 122, 0.6);
+    }
+    .cell-partner a:hover {
+      color: var(--accent);
+      border-bottom-style: solid;
+    }
+
+    .cell-role {
+      font-size: 10px;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
+
+    .cell-metrics {
+      font-size: 9.5px;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .metric-label {
+      font-weight: 600;
+      color: var(--text-header);
+    }
+
+    .empty-cell {
+      font-size: 9.5px;
+      color: #545a77;
+      text-align: center;
+      font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      body { padding: 14px; }
+      h1 { font-size: 20px; }
+      .subtitle { font-size: 12px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h3>MLS Partnership Matrix </h3>
+    <p class="subtitle">
+      Teams are listed on the left (logos + conference), with partnership
+      <strong>type and subtype on the top</strong>. Western Conference clubs
+      are ordered first, starting with <strong>Seattle, Portland, Vancouver</strong>.
+      Each cell provides the key partner, role, and metric placeholders
+      (<em>value to club</em>, <em>value to partner / KPIs</em>).
+    </p>
+    <div class="pill-row">
+      <div class="pill">
+      Scroll right to compare subtypes; scroll down to scan all clubs.
+      </div>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Partnership category tabs">
+    <button class="tab-btn active" data-tab="monetary">
+      <span class="dot"></span> Monetary: Jersey & Venue
+    </button>
+    <button class="tab-btn" data-tab="brand">
+      <span class="dot"></span> Brand Alignment
+    </button>
+    <button class="tab-btn" data-tab="activation">
+      <span class="dot"></span> Activations
+    </button>
+    <button class="tab-btn" data-tab="civic">
+      <span class="dot"></span> Civic & Community
+    </button>
+  </nav>
+
+  <!-- Monetary -->
+  <section id="panel-monetary" class="tab-panel active">
+    <div class="panel-header">
+      <div>
+        <strong>Monetary: core rights inventory</strong>
+        <small>
+          Front-of-kit, sleeve and stadium naming rights. Where available, notes
+          approximate deal values (e.g., LA Galaxy × Herbalife ~US$7M/year;
+          league-wide Apple media deal US$2.5B over 10 years) – most club deals
+          remain undisclosed and are flagged as such for you to fill in.
+        </small>
+      </div>
+      <div class="kpi-chip">
+        <span class="dot"></span>
+        Focus: Rights fees, guaranteed minimums, and media/social value.
+      </div>
+    </div>
+    <div class="table-shell">
+      <table aria-label="Monetary partnership table">
+        <thead>
+          <tr id="monetary-header"></tr>
+        </thead>
+        <tbody id="monetary-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Brand -->
+  <section id="panel-brand" class="tab-panel">
+    <div class="panel-header">
+      <div>
+        <strong>Brand alignment & commercial platforms</strong>
+        <small>
+          Partnerships where brand story and category fit matter as much as cash:
+          healthcare, financial services, lifestyle/CPG and tech/data partners
+          building long-term platforms with clubs.
+        </small>
+      </div>
+      <div class="kpi-chip">
+        <span class="dot"></span>
+        Focus: Category exclusivity, perception lift, platform longevity.
+      </div>
+    </div>
+    <div class="table-shell">
+      <table aria-label="Brand alignment partnership table">
+        <thead>
+          <tr id="brand-header"></tr>
+        </thead>
+        <tbody id="brand-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Activations -->
+  <section id="panel-activation" class="tab-panel">
+    <div class="panel-header">
+      <div>
+        <strong>Activations & experience</strong>
+        <small>
+          Matchday themes, sampling and digital content programs that turn rights
+          into measurable fan engagement. Many cells remain blank deliberately as
+          placeholders for your club-specific activation intelligence.
+        </small>
+      </div>
+      <div class="kpi-chip">
+        <span class="dot"></span>
+        Focus: Impressions, engagement, conversions, and data capture.
+      </div>
+    </div>
+    <div class="table-shell">
+      <table aria-label="Activation partnership table">
+        <thead>
+          <tr id="activation-header"></tr>
+        </thead>
+        <tbody id="activation-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- Civic -->
+  <section id="panel-civic" class="tab-panel">
+    <div class="panel-header">
+      <div>
+        <strong>Civic, community & social impact</strong>
+        <small>
+          Youth, health, environment and inclusion partnerships. Metrics lean
+          toward beneficiaries reached, programs delivered, and ESG storytelling.
+        </small>
+      </div>
+      <div class="kpi-chip">
+        <span class="dot"></span>
+        Focus: People served, community assets built, and impact narratives.
+      </div>
+    </div>
+    <div class="table-shell">
+      <table aria-label="Civic partnership table">
+        <thead>
+          <tr id="civic-header"></tr>
+        </thead>
+        <tbody id="civic-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <script>
+    // ------------------------------------------------------------
+    // Team ordering: Western first, starting SEA, POR, VAN
+    // ------------------------------------------------------------
+    const teams = [
+      { id: "SEA", name: "Seattle Sounders FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/SEA.svg", meta: "Western" },
+      { id: "POR", name: "Portland Timbers", logo: "https://images.mlssoccer.com/image/upload/assets/logos/POR.svg", meta: "Western" },
+      { id: "VAN", name: "Vancouver Whitecaps FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/VAN.svg", meta: "Western" },
+      { id: "ATX", name: "Austin FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/ATX.svg", meta: "Western" },
+      { id: "COL", name: "Colorado Rapids", logo: "https://images.mlssoccer.com/image/upload/assets/logos/COL.svg", meta: "Western" },
+      { id: "DAL", name: "FC Dallas", logo: "https://images.mlssoccer.com/image/upload/assets/logos/DAL.svg", meta: "Western" },
+      { id: "HOU", name: "Houston Dynamo FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/HOU.svg", meta: "Western" },
+      { id: "LA",  name: "LA Galaxy", logo: "https://images.mlssoccer.com/image/upload/assets/logos/LA.svg", meta: "Western" },
+      { id: "LAFC", name: "Los Angeles Football Club", logo: "https://images.mlssoccer.com/image/upload/assets/logos/LAFC.svg", meta: "Western" },
+      { id: "MIN", name: "Minnesota United FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/MIN.svg", meta: "Western" },
+      { id: "RSL", name: "Real Salt Lake", logo: "https://images.mlssoccer.com/image/upload/assets/logos/RSL.svg", meta: "Western" },
+      { id: "SD",  name: "San Diego FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/SD.svg", meta: "Western" },
+      { id: "SJ",  name: "San Jose Earthquakes", logo: "https://images.mlssoccer.com/image/upload/assets/logos/SJ.svg", meta: "Western" },
+      { id: "SKC", name: "Sporting Kansas City", logo: "https://images.mlssoccer.com/image/upload/assets/logos/SKC.svg", meta: "Western" },
+      { id: "STL", name: "St. Louis CITY SC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/STL.svg", meta: "Western" },
+      // Eastern Conference after Western
+      { id: "ATL", name: "Atlanta United FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/ATL.svg", meta: "Eastern" },
+      { id: "MTL", name: "CF Montréal", logo: "https://images.mlssoccer.com/image/upload/assets/logos/MTL.svg", meta: "Eastern" },
+      { id: "CLT", name: "Charlotte FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/CLT.svg", meta: "Eastern" },
+      { id: "CHI", name: "Chicago Fire FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/CHI.svg", meta: "Eastern" },
+      { id: "CLB", name: "Columbus Crew", logo: "https://images.mlssoccer.com/image/upload/assets/logos/CLB.svg", meta: "Eastern" },
+      { id: "DC",  name: "D.C. United", logo: "https://images.mlssoccer.com/image/upload/assets/logos/DC.svg", meta: "Eastern" },
+      { id: "CIN", name: "FC Cincinnati", logo: "https://images.mlssoccer.com/image/upload/assets/logos/CIN.svg", meta: "Eastern" },
+      { id: "MIA", name: "Inter Miami CF", logo: "https://images.mlssoccer.com/image/upload/assets/logos/MIA.svg", meta: "Eastern" },
+      { id: "NSH", name: "Nashville SC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/NSH.svg", meta: "Eastern" },
+      { id: "NE",  name: "New England Revolution", logo: "https://images.mlssoccer.com/image/upload/assets/logos/NE.svg", meta: "Eastern" },
+      { id: "NYC", name: "New York City FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/NYC.svg", meta: "Eastern" },
+      { id: "RBNY",name: "New York Red Bulls", logo: "https://images.mlssoccer.com/image/upload/assets/logos/RBNY.svg", meta: "Eastern" },
+      { id: "ORL", name: "Orlando City SC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/ORL.svg", meta: "Eastern" },
+      { id: "PHI", name: "Philadelphia Union", logo: "https://images.mlssoccer.com/image/upload/assets/logos/PHI.svg", meta: "Eastern" },
+      { id: "TOR", name: "Toronto FC", logo: "https://images.mlssoccer.com/image/upload/assets/logos/TOR.svg", meta: "Eastern" }
+    ];
+
+    // ------------------------------------------------------------
+    // Taxonomy definitions (subtypes per category)
+    // ------------------------------------------------------------
+    const taxonomy = {
+      monetary: {
+        subtypes: [
+          {
+            id: "frontkit",
+            name: "Front-of-kit Jersey Sponsor",
+            desc: "Principal shirt partner; typically multi-year mid–high seven-figure annual rights fees."
+          },
+          {
+            id: "sleeve",
+            name: "Sleeve Jersey Sponsor",
+            desc: "Secondary jersey inventory, often for challenger or regional brands."
+          },
+          {
+            id: "stadium",
+            name: "Stadium Naming Rights",
+            desc: "Long-term venue naming deals (banks, healthcare, tech, logistics)."
+          }
+        ]
+      },
+      brand: {
+        subtypes: [
+          {
+            id: "health",
+            name: "Healthcare & Wellness Platforms",
+            desc: "Hospital systems and health brands anchored in performance, prevention and access."
+          },
+          {
+            id: "finance",
+            name: "Financial Services & Banking",
+            desc: "Banks/fintechs using club IP to drive accounts, loans and cards."
+          },
+          {
+            id: "lifestyle",
+            name: "Lifestyle, CPG & Local Culture",
+            desc: "Food, beverage and lifestyle brands aligned with club and city identity."
+          },
+          {
+            id: "tech",
+            name: "Technology, Data & Content",
+            desc: "Streaming, SaaS, data and content platforms embedded in operations and fan experience."
+          }
+        ]
+      },
+      activation: {
+        subtypes: [
+          {
+            id: "matchday",
+            name: "Matchday & Themed Weeks",
+            desc: "Named nights and rivalry weeks, often tied to cause, culture or partners."
+          },
+          {
+            id: "sampling",
+            name: "Sampling & In-Stadium Commerce",
+            desc: "Concourse sampling, premium hospitality and integrated retail programs."
+          },
+          {
+            id: "digital",
+            name: "Digital & Social Content",
+            desc: "Branded content series, betting hubs and behind-the-scenes storytelling."
+          }
+        ]
+      },
+      civic: {
+        subtypes: [
+          {
+            id: "healthmh",
+            name: "Health & Mental Health Impact",
+            desc: "Health-system and nonprofit alliances around physical and mental health outcomes."
+          },
+          {
+            id: "youth",
+            name: "Youth, Education & Academies",
+            desc: "Mini-pitches, academies and school-based programs."
+          },
+          {
+            id: "environment",
+            name: "Environment & Sustainability",
+            desc: "Greener Goals, recycling, energy and climate-resilience projects."
+          },
+          {
+            id: "dei",
+            name: "DEI, Heritage & Foundations",
+            desc: "Heritage months, inclusion campaigns and club foundations."
+          }
+        ]
+      }
+    };
+
+    // ------------------------------------------------------------
+    // Partnership data (focused detail on Western clubs; others as stubs)
+    // fields: name, url, role, club (value to club), kpi (value to partner)
+    // ------------------------------------------------------------
+
+    const data = {
+      monetary: {
+        frontkit: {
+          SEA: {
+            name: "Providence",
+            url: "https://www.soundersfc.com/news/sounders-fc-and-providence-agree-to-unprecedented-community-focused-partnership",
+            role: "Healthcare front-of-kit partner",
+            club: "Undisclosed multi-year; likely mid–seven figures annually plus in-kind medical support.",
+            kpi: "Brand lift in Pacific Northwest; youth mental-health platform; national jersey impressions."
+          },
+          POR: {
+            name: "Tillamook",
+            url: "https://www.timbers.com/news/portland-timbers-unveil-tillamook-as-jersey-partner",
+            role: "Dairy front-of-kit partner",
+            club: "Undisclosed; major local anchor brand underwriting Providence Park era.",
+            kpi: "Oregon-first story; product visibility and sampling at matches; national broadcast halo."
+          },
+          VAN: {
+            name: "TELUS",
+            url: "https://www.whitecapsfc.com/news/vancouver-whitecaps-fc-unveil-the-peak-jersey",
+            role: "Telecom jersey partner",
+            club: "Undisclosed; key revenue pillar for Whitecaps.",
+            kpi: "Association with BC’s flagship soccer club; 5G/tech storytelling."
+          },
+          ATX: {
+            name: "YETI",
+            url: "https://www.austinfc.com/news/austin-fc-announces-yeti-as-official-front-of-jersey-partner",
+            role: "Inaugural jersey partner",
+            club: "Undisclosed launch deal powering expansion entry.",
+            kpi: "Deep link to Austin outdoor & music culture; kit-driven global awareness."
+          },
+          COL: {
+            name: "UCHealth",
+            url: "https://www.coloradorapids.com/news/colorado-rapids-and-uchealth-launch-health-focused-initiative-as-part-of-multi-y",
+            role: "Healthcare jersey partner",
+            club: "Undisclosed; multi-year plus campaign funding.",
+            kpi: "‘Ready. Set. CO.’ health campaign reach; clinic visits; brand awareness."
+          },
+          DAL: {
+            name: "Children's Health / UT Southwestern",
+            url: "https://www.fcdallas.com/news/fc-dallas-introduces-children-s-health-and-ut-southwestern-as-official-health-ca",
+            role: "Home & away jersey partners",
+            club: "Undisclosed; significant healthcare partnership across pro & academy.",
+            kpi: "Youth health positioning; referrals from community clinics; jersey impressions."
+          },
+          HOU: {
+            name: "MD Anderson Cancer Center",
+            url: "https://www.mlssoccer.com/news/houston-dynamo-ink-unique-partnership-md-anderson-cancer-center",
+            role: "Cause-first jersey partner",
+            club: "Undisclosed; partly structured as cause marketing vs. pure fee.",
+            kpi: "Screenings, donations and survivorship storytelling; strong brand affinity."
+          },
+          LA: {
+            name: "Herbalife",
+            url: "https://www.lagalaxy.com/news/la-galaxy-and-herbalife-nutrition-continue-longest-running-jersey-sponsorship-in",
+            role: "Presenting & jersey sponsor",
+            club: "Reported ~US$7M per year in latest extension, one of league’s richest jersey deals.",
+            kpi: "Global brand visibility; community investment; nutrition/performance association."
+          },
+          LAFC: {
+            name: "BMO",
+            url: "https://www.lafc.com/news/lafc-announces-bmo-as-official-jersey-sponsor",
+            role: "Banking jersey partner",
+            club: "Undisclosed multi-asset deal including naming rights.",
+            kpi: "Customer acquisition in LA market; cross-border brand consistency."
+          },
+          MIN: {
+            name: "Target",
+            url: "https://www.mnufc.com/news/target-becomes-official-partner-and-kit-sponsor",
+            role: "Hometown jersey partner",
+            club: "Undisclosed; core financial backbone for early MNUFC seasons.",
+            kpi: "Retail integration; youth soccer support; national exposure."
+          },
+          RSL: {
+            name: "Select Health",
+            url: "https://www.rsl.com/news/real-salt-lake-utah-royals-fc-unveil-major-long-term-community-focused-partnersh",
+            role: "Healthcare jersey partner",
+            club: "Undisclosed long-term deal across RSL & Utah Royals.",
+            kpi: "Social value estimated around US$1–2M annually; strong regional brand linkage."
+          },
+          SD: {
+            name: "DIRECTV",
+            url: "https://www.sandiegofc.com/news/san-diego-fc-announces-directv-as-the-club-s-official-jersey-partner",
+            role: "Inaugural jersey partner",
+            club: "Undisclosed; top commercial asset for expansion launch.",
+            kpi: "Subscription and commercial-account growth tied to soccer fans; ‘Chrome Club’ experiences."
+          },
+          SJ: {
+            name: "El Camino Health",
+            url: "https://www.sjearthquakes.com/news/news-san-jose-earthquakes-unveil-el-camino-health-as-new-front-of-jersey-partner",
+            role: "Healthcare jersey partner",
+            club: "Undisclosed.",
+            kpi: "Brand visibility among Silicon Valley families; patient acquisition."
+          },
+          SKC: {
+            name: "Compass Minerals",
+            url: "https://www.sportingkc.com/news/sporting-kc-announces-compass-minerals-as-new-jersey-front-partner",
+            role: "Jersey front partner",
+            club: "Undisclosed.",
+            kpi: "B2B/hospitality platform for global minerals company with Midwestern roots."
+          },
+          STL: {
+            name: "Purina",
+            url: "https://newscenter.purina.com/2022-11-16-Purina-and-St-Louis-CITY-SC-Unveil-Official-Team-Kit-Ahead-of-Inaugural-Season",
+            role: "Founding jersey partner",
+            club: "Undisclosed; cornerstone of CITY’s inaugural commercial portfolio.",
+            kpi: "Pet-owner engagement; shelter partnerships; team dog program storytelling."
+          },
+
+          // Eastern (shorter stubs – fill as needed)
+          ATL: { name: "American Family Insurance", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "National insurance visibility tied to ATLUTD." },
+          MTL: { name: "BMO", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Quebec banking brand lift via kit & stadium." },
+          CLT: { name: "Ally", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Digital bank awareness in Charlotte & Carolinas." },
+          CHI: { name: "Carvana", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Online auto marketplace impressions." },
+          CLB: { name: "Nationwide", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Strengthens Columbus identity and insurance story." },
+          DC:  { name: "Guidehouse", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "B2B credibility and client hospitality." },
+          CIN: { name: "Mercy Health", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Health-system preference and clinic traffic." },
+          MIA: { name: "Royal Caribbean", url: "", role: "Jersey partner", club: "Undisclosed (top-tier post-Messi).", kpi: "Cruise bookings & brand equity from global exposure." },
+          NSH: { name: "Renasant Bank", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Accounts and loans from Nashville SC fanbase." },
+          NE:  { name: "Gillette", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Grooming brand association with New England soccer." },
+          NYC: { name: "Etihad Airways", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Premium airline positioning in NYC." },
+          RBNY:{ name: "Red Bull", url: "", role: "Owner & jersey", club: "Embedded in ownership; not itemized.", kpi: "Flagship experiential asset for energy drink brand." },
+          ORL: { name: "Orlando Health", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Regional healthcare preference; hospital traffic." },
+          PHI: { name: "Bimbo / Thomas'", url: "", role: "Home & away jersey", club: "Undisclosed.", kpi: "Family-brand visibility and retail activation.", },
+          TOR: { name: "BMO", url: "", role: "Jersey partner", club: "Undisclosed.", kpi: "Canadian banking affinity with TFC fans." }
+        },
+
+        sleeve: {
+          SEA: {
+            name: "Emerald Queen Casino / Puyallup Tribe",
+            url: "https://www.soundersfc.com/news/sounders-fc-and-puyallup-tribe-of-indians-announce-mutually-beneficial-partne",
+            role: "Home & away sleeve partners",
+            club: "Undisclosed incremental jersey revenue.",
+            kpi: "Visibility for tribal enterprises and sovereignty on regional/national broadcasts."
+          },
+          ATX: {
+            name: "Siete Foods",
+            url: "https://www.austinfc.com/news/austin-fc-announces-siete-foods-as-club-s-new-jersey-sleeve-partner",
+            role: "Sleeve & snack partner",
+            club: "Undisclosed; incremental inventory monetization.",
+            kpi: "Sampling, brand love and cultural relevance with Latino fans."
+          },
+          MIA: {
+            name: "Fracht Group",
+            url: "https://www.intermiamicf.com/news/inter-miami-cf-announces-fracht-group-as-official-sleeve-partner",
+            role: "Sleeve & logistics partner",
+            club: "Undisclosed; meaningful given Messi spotlight.",
+            kpi: "Global freight brand awareness via worldwide broadcasts."
+          },
+          LA: {
+            name: "RBC Wealth Management",
+            url: "",
+            role: "Sleeve partner",
+            club: "Undisclosed.",
+            kpi: "HNW client entertainment & brand association."
+          },
+          LAFC: {
+            name: "Ford",
+            url: "",
+            role: "Sleeve & auto partner",
+            club: "Undisclosed.",
+            kpi: "Vehicle consideration via stadium displays and campaigns."
+          },
+          NSH: {
+            name: "Hyundai",
+            url: "",
+            role: "Sleeve partner",
+            club: "Undisclosed.",
+            kpi: "Auto sales lift within Nashville DMA."
+          },
+          NYC: {
+            name: "Capital Rx",
+            url: "",
+            role: "Sleeve healthcare-tech partner",
+            club: "Undisclosed.",
+            kpi: "Employer and consumer adoption of pharmacy-benefit solution."
+          },
+          RBNY:{
+            name: "OANDA",
+            url: "",
+            role: "Sleeve FX partner",
+            club: "Undisclosed.",
+            kpi: "FX platform usage and account growth."
+          },
+          CIN: {
+            name: "Kroger",
+            url: "",
+            role: "Sleeve grocery partner",
+            club: "Undisclosed.",
+            kpi: "Store traffic and private-label sales tied to FCC promotions."
+          },
+          PHI: {
+            name: "Independence Blue Cross",
+            url: "",
+            role: "Sleeve insurer",
+            club: "Undisclosed.",
+            kpi: "Policyholders and brand strength in Greater Philly."
+          },
+          STL: {
+            name: "BJC HealthCare",
+            url: "https://www.stlcitysc.com/news/st-louis-city-sc-and-bjc-healthcare-announce-multi-year-partnership",
+            role: "Sleeve health partner",
+            club: "Undisclosed.",
+            kpi: "Local health-system awareness & program participation."
+          },
+          TOR: {
+            name: "LG",
+            url: "",
+            role: "Sleeve electronics partner",
+            club: "Undisclosed.",
+            kpi: "TV & appliance sales via TFC-branded campaigns."
+          }
+        },
+
+        stadium: {
+          SEA: {
+            name: "Lumen Field",
+            url: "https://www.lumenfield.com/",
+            role: "Tech & telecom naming rights",
+            club: "Shared NFL/MLS venue; sizable long-term revenue to facility and tenants.",
+            kpi: "Brand association with major Seattle sports & events; B2B deals."
+          },
+          POR: {
+            name: "Providence Park",
+            url: "https://www.timbers.com/stadium",
+            role: "Healthcare naming partner",
+            club: "Supports operations of Timbers & Thorns.",
+            kpi: "Health-brand visibility across a soccer-mad city."
+          },
+          VAN: {
+            name: "BC Place",
+            url: "https://www.bcplace.com/",
+            role: "Provincial venue brand",
+            club: "No separate Whitecaps naming-rights cash.",
+            kpi: "Provincial brand equity; broad-event footprint."
+          },
+          ATX: {
+            name: "Q2 Stadium",
+            url: "https://www.austinfc.com/stadium",
+            role: "Fintech naming partner",
+            club: "Key component in stadium financing.",
+            kpi: "Fintech brand awareness and client growth in Austin market."
+          },
+          COL: {
+            name: "DICK'S Sporting Goods Park",
+            url: "https://www.coloradorapids.com/stadium",
+            role: "Sporting-goods naming rights",
+            club: "Long-term revenue for complex operations.",
+            kpi: "Category ownership in local sports participation."
+          },
+          DAL: {
+            name: "Toyota Stadium",
+            url: "https://www.fcdallas.com/stadium",
+            role: "Automotive naming rights",
+            club: "Supports FC Dallas and youth soccer complex.",
+            kpi: "Brand integration in youth/grassroots ecosystem."
+          },
+          HOU: {
+            name: "Shell Energy Stadium",
+            url: "https://www.houstondynamofc.com/stadium",
+            role: "Energy naming partner",
+            club: "New naming deal replacing BBVA; material venue revenue.",
+            kpi: "Energy-transition storytelling in global energy capital."
+          },
+          LA: {
+            name: "Dignity Health Sports Park",
+            url: "https://www.lagalaxy.com/stadium",
+            role: "Health-system naming partner",
+            club: "Long-term stadium income.",
+            kpi: "Community health branding & program activation."
+          },
+          LAFC: {
+            name: "BMO Stadium",
+            url: "https://www.lafc.com/stadium",
+            role: "Banking naming rights",
+            club: "Integrated with BMO jersey/finance platform.",
+            kpi: "Banking customer growth; premium brand positioning."
+          },
+          MIN: {
+            name: "Allianz Field",
+            url: "https://www.mnufc.com/stadium",
+            role: "Insurance naming partner",
+            club: "Significant support for soccer-specific stadium.",
+            kpi: "Adds to Allianz global stadium portfolio; awareness & hospitality."
+          },
+          RSL: {
+            name: "America First Field",
+            url: "https://www.rsl.com/stadium/america-first-field",
+            role: "Credit union naming rights",
+            club: "New naming revenue since 2022.",
+            kpi: "Membership growth and regional visibility."
+          },
+          SD: {
+            name: "Snapdragon Stadium",
+            url: "https://snapdragonstadium.com/",
+            role: "Qualcomm Snapdragon naming partner",
+            club: "Venue economics shared with SDSU; SDFC leverages facility quality.",
+            kpi: "Showcases Snapdragon mobile brand via events and broadcasts."
+          },
+          SJ: {
+            name: "PayPal Park",
+            url: "https://www.sjearthquakes.com/paypalpark",
+            role: "Fintech naming rights",
+            club: "Historic 10-year partnership supporting stadium finances.",
+            kpi: "Live testbed for payments and commerce solutions."
+          },
+          SKC: {
+            name: "Children's Mercy Park",
+            url: "https://www.sportingkc.com/stadium",
+            role: "Pediatric health naming partner",
+            club: "Supports stadium and training facilities.",
+            kpi: "Family-focused brand association and community outreach."
+          },
+          STL: {
+            name: "CITYPARK",
+            url: "https://www.stlcitysc.com/stadium",
+            role: "Civic-first stadium identity",
+            club: "Leaves future upside for possible naming-rights sale.",
+            kpi: "STLMade civic pride platform."
+          },
+          ATL: { name: "Mercedes-Benz Stadium", url: "", role: "Automotive naming rights (NFL-led)", club: "MLS benefits via shared world-class venue.", kpi: "Brand association with major US stadium." },
+          CLB: { name: "Lower.com Field", url: "", role: "Fintech naming partner", club: "Stadium financing support.", kpi: "Mortgage/loan lead generation." },
+          DC:  { name: "Audi Field", url: "", role: "Auto naming rights", club: "Key stadium revenue stream.", kpi: "Audi brand integration in US capital." },
+          CIN: { name: "TQL Stadium", url: "", role: "Logistics naming partner", club: "Supports privately funded venue.", kpi: "Logistics brand awareness." },
+          NSH: { name: "GEODIS Park", url: "", role: "Logistics naming partner", club: "Core to Nashville SC stadium economics.", kpi: "Freight/logistics branding." },
+          NE:  { name: "Gillette Stadium", url: "", role: "Shared NFL venue naming", club: "Revs benefit from Patriots-led deal.", kpi: "Razor brand exposure across events." },
+          NYC: { name: "Yankee Stadium / Citi Field", url: "", role: "MLB venue brands", club: "No separate MLS naming revenue yet.", kpi: "Incremental event value for Yankees/Citi." },
+          RBNY:{ name: "Red Bull Arena", url: "", role: "Owner naming rights", club: "Embedded in Red Bull structure.", kpi: "Global stadium asset for brand." },
+          ORL: { name: "INTER&Co Stadium", url: "", role: "Financial naming partner", club: "New multi-year venue revenue.", kpi: "LatAm-focused finance storytelling." },
+          PHI: { name: "Subaru Park", url: "", role: "Automotive naming partner", club: "Venue revenue & CSR support.", kpi: "Love Promise initiatives; pet & eco work." },
+          TOR: { name: "BMO Field", url: "", role: "Banking naming partner", club: "Key MLSE stadium revenue.", kpi: "Canadian banking brand asset." },
+          MTL: { name: "Stade Saputo", url: "", role: "Corporate-family name", club: "Integrated with ownership.", kpi: "Saputo family/community branding." },
+          CLT: { name: "Bank of America Stadium", url: "", role: "NFL-led naming rights", club: "MLS benefits via shared stadium.", kpi: "Bank of America brand exposure." },
+          CHI: { name: "Soldier Field", url: "", role: "Civic brand", club: "No separate commercial naming; relies on other assets.", kpi: "City of Chicago prestige." },
+          MIA: { name: "Chase Stadium", url: "", role: "Banking naming partner", club: "High-value naming revenue post-Messi.", kpi: "Card/loan growth and global brand halo." }
+        }
+      },
+
+      brand: {
+        health: {
+          SEA: {
+            name: "Providence",
+            url: "https://www.soundersfc.com/news/sounders-fc-and-providence-agree-to-unprecedented-community-focused-partnership",
+            role: "Health system & jersey partner",
+            club: "Combines cash + community investment; central pillar of club CSR.",
+            kpi: "Clinic usage, mental-health program reach, and sentiment lift."
+          },
+          HOU: {
+            name: "MD Anderson",
+            url: "https://www.houstondynamofc.com/news/connection-beyond-sponsorship",
+            role: "Cancer center partner",
+            club: "Differentiates Dynamo brand as purpose-driven.",
+            kpi: "Screenings booked, donations raised, media impressions."
+          },
+          COL: {
+            name: "UCHealth",
+            url: "https://www.coloradorapids.com/news/colorado-rapids-and-uchealth-launch-health-focused-initiative-as-part-of-multi-y",
+            role: "Health campaign partner",
+            club: "Elevates Rapids as vehicle for statewide wellness messaging.",
+            kpi: "Participation in ‘Ready. Set. CO.’ initiatives."
+          }
+        },
+        finance: {
+          LAFC: {
+            name: "BMO",
+            url: "https://www.lafc.com/news/lafc-announces-bmo-as-official-jersey-sponsor",
+            role: "Jersey & banking platform",
+            club: "Single partner anchors jersey + stadium + community programs.",
+            kpi: "New accounts and brand preference in LA market."
+          },
+          TOR: {
+            name: "BMO",
+            url: "",
+            role: "Jersey & stadium banking partner",
+            club: "Longest-running Canadian MLS finance partner.",
+            kpi: "National awareness as ‘bank of Canadian soccer’."
+          },
+          CLB: {
+            name: "Nationwide",
+            url: "",
+            role: "Insurance & financial services partner",
+            club: "Supports multiple Crew assets and CSR.",
+            kpi: "Insurance quote volume and sentiment in Ohio."
+          }
+        },
+        lifestyle: {
+          ATX: {
+            name: "Siete Foods",
+            url: "https://www.austinfc.com/news/austin-fc-announces-siete-foods-as-club-s-new-jersey-sleeve-partner",
+            role: "Latino-owned snack partner",
+            club: "Authentic alignment with Austin’s Latino culture.",
+            kpi: "Product trial at Q2 Stadium; heritage content engagement."
+          },
+          POR: {
+            name: "Tillamook",
+            url: "https://www.timbers.com/news/portland-timbers-unveil-tillamook-as-jersey-partner",
+            role: "Local dairy & food partner",
+            club: "Reinforces Timbers as club of Oregon.",
+            kpi: "Share growth in Pacific Northwest grocery; social engagement."
+          },
+          STL: {
+            name: "Purina",
+            url: "https://newscenter.purina.com/2022-11-16-Purina-and-St-Louis-CITY-SC-Unveil-Official-Team-Kit-Ahead-of-Inaugural-Season",
+            role: "Pet-care & lifestyle partner",
+            club: "Defines CITY as pet-friendly, community-first club.",
+            kpi: "Pet adoption and brand love metrics."
+          }
+        },
+        tech: {
+          SD: {
+            name: "DIRECTV",
+            url: "https://www.sandiegofc.com/news/san-diego-fc-announces-directv-as-the-club-s-official-jersey-partner",
+            role: "Video & ‘Chrome Club’ partner",
+            club: "Positions SDFC as premium broadcast property from day one.",
+            kpi: "Subscription/ARPU lift and ad-sales value tied to club."
+          },
+          SEA: {
+            name: "Apple (league-wide)",
+            url: "https://www.mlssoccer.com/news/apple-and-major-league-soccer-announce-10-year-partnership",
+            role: "Global streaming & data partner",
+            club: "Share of US$2.5B over 10 years plus global reach and fan data.",
+            kpi: "Apple TV+ subs and engagement; Season Pass usage."
+          },
+          SJ: {
+            name: "PayPal",
+            url: "https://www.sjearthquakes.com/news/news-earthquakes-paypal-agree-historic-10-year-stadium-naming-rights-partnership",
+            role: "PayTech innovation partner",
+            club: "Supports stadium and digital infrastructure.",
+            kpi: "Payments volume and small-business engagement around PayPal Park."
+          }
+        }
+      },
+
+      activation: {
+        matchday: {
+          SEA: {
+            name: "Providence Matchdays",
+            url: "https://www.soundersfc.com/news/in-partnership-with-providence-regence-and-renton-school-district-sounders-fc-an",
+            role: "Mental-health themed games",
+            club: "Sellable tentpoles with premium inventory and community narrative.",
+            kpi: "Attendance, engagement with mental-health resources, earned media."
+          },
+          POR: {
+            name: "Stand Together Week Matches",
+            url: "https://www.timbers.com/stand-together/stand-together-week",
+            role: "Volunteer-driven match platforms",
+            club: "Adds CSR halo and partner integration to home fixtures.",
+            kpi: "Volunteer hours, nonprofits supported, sponsor impressions."
+          },
+          HOU: {
+            name: "Kick Childhood Cancer Nights",
+            url: "https://www.houstondynamofc.com/houstondash/news/houston-dash-and-houston-dynamo-fc-extend-agreement-with-the-university-of-texas-md-anderson-cancer-center",
+            role: "Cause nights with MD Anderson",
+            club: "Drives themed ticketing and merchandise.",
+            kpi: "Funds raised and community impact metrics."
+          }
+        },
+        sampling: {
+          ATX: {
+            name: "Siete Sampling at Q2",
+            url: "https://www.austinfc.com/news/austin-fc-announces-siete-foods-as-club-s-new-jersey-sleeve-partner",
+            role: "In-stadium sampling & concessions",
+            club: "Upsell in F&B and differentiated matchday experience.",
+            kpi: "Sample volume, post-match purchase intent, social chatter."
+          }
+        },
+        digital: {
+          RSL: {
+            name: "Zoomph Jersey Valuation",
+            url: "https://zoomph.com/blog/mls-jersey-sponsors/",
+            role: "Social valuation analytics",
+            club: "Quantifies jersey exposure (~US$ social value) for sales decks.",
+            kpi: "Evidence to justify increases in future rights fees."
+          }
+        }
+      },
+
+      civic: {
+        healthmh: {
+          SEA: {
+            name: "Providence + RAVE + Renton SD",
+            url: "https://www.soundersfc.com/news/in-partnership-with-providence-regence-and-renton-school-district-sounders-fc-an",
+            role: "Youth mental-health initiative",
+            club: "Positions Sounders as leaders on youth well-being.",
+            kpi: "Students reached, counseling sessions delivered, sentiment metrics."
+          },
+          HOU: {
+            name: "MD Anderson Partnership",
+            url: "https://www.houstondynamofc.com/news/connection-beyond-sponsorship",
+            role: "Cancer prevention & survivorship",
+            club: "Anchor CSR platform for Dynamo & Dash.",
+            kpi: "Event attendance, screenings, survivorship stories."
+          }
+        },
+        youth: {
+          SEA: {
+            name: "RAVE Foundation – 26 Fields by 2026",
+            url: "https://www.soundersfc.com/news/sounders-and-rave-foundation-achieve-26-mini-pitches-by-2026-goal-strive-to-build-26-more",
+            role: "Mini-pitch build program",
+            club: "Long-term pipeline of young fans and community goodwill.",
+            kpi: "Fields built, hours of free play, participating neighborhoods."
+          },
+          SD: {
+            name: "Right to Dream Academy",
+            url: "https://www.sandiegofc.com/news/san-diego-fc-s-right-to-dream-academy-officially-opens-marking-a-new-era-for-talent-development-in-north-america",
+            role: "Residential academy & education",
+            club: "Creates global-caliber talent pathway.",
+            kpi: "Scholarships, graduates and pro contracts."
+          },
+          ATX: {
+            name: "4ATX – Verde Leaders",
+            url: "https://www.austinfc.com/4atx-foundation/youth-leadership",
+            role: "Youth leadership & SEL",
+            club: "Deepens ties with Title I schools.",
+            kpi: "Students served and SEL outcome metrics."
+          }
+        },
+        environment: {
+          LAFC: {
+            name: "TreePeople – MLS Greener Goals",
+            url: "https://www.mlssoccer.com/news/mls-celebrates-earth-day-with-greener-goals-week-of-service-2025",
+            role: "Urban greening partner",
+            club: "Earth Day volunteer and content platform.",
+            kpi: "Trees planted, acres restored, volunteer participation."
+          }
+        },
+        dei: {
+          ATX: {
+            name: "Siete – Latino Heritage Month",
+            url: "https://www.austinfc.com/news/austin-fc-announces-siete-foods-as-club-s-new-jersey-sleeve-partner",
+            role: "Heritage & DEI storytelling",
+            club: "Authenticates club’s connection to Latino communities.",
+            kpi: "Content engagement, event attendance, brand affinity."
+          },
+          STL: {
+            name: "STLMade / CITY Foundation",
+            url: "https://www.stlcitysc.com/news/st-louis-city-sc-unveils-inaugural-home-kit",
+            role: "Civic pride & inclusion platform",
+            club: "Reinforces CITY as ‘club of the whole city’.",
+            kpi: "Community projects funded, neighborhoods reached."
+          }
+        }
+      }
+    };
+
+    // ------------------------------------------------------------
+    // Rendering helpers (transposed orientation)
+    // ------------------------------------------------------------
+    function buildTable(categoryKey, headerRowId, bodyId) {
+      const headerRow = document.getElementById(headerRowId);
+      const tbody = document.getElementById(bodyId);
+      const subtypes = taxonomy[categoryKey].subtypes;
+
+      // Build header row: first cell is "Club", then subtypes
+      headerRow.innerHTML = "";
+      const thTeam = document.createElement("th");
+      thTeam.className = "team-col";
+      thTeam.textContent = "Club";
+      headerRow.appendChild(thTeam);
+
+      subtypes.forEach(st => {
+        const th = document.createElement("th");
+        th.innerHTML = `
+          <div class="subtype-name">${st.name}</div>
+          <div class="subtype-desc">${st.desc}</div>
+        `;
+        headerRow.appendChild(th);
+      });
+
+      // Build body rows: one per team
+      tbody.innerHTML = "";
+      const catData = data[categoryKey] || {};
+
+      teams.forEach(team => {
+        const tr = document.createElement("tr");
+
+        const teamCell = document.createElement("td");
+        teamCell.className = "team-col";
+        teamCell.innerHTML = `
+          <div class="team-header">
+            <div class="team-logo">
+              <img src="${team.logo}" alt="${team.name} logo" />
+            </div>
+            <div>
+              <div class="team-name">${team.name}</div>
+              <div class="team-meta">${team.meta} Conference</div>
+            </div>
+          </div>
+        `;
+        tr.appendChild(teamCell);
+
+        subtypes.forEach(st => {
+          const td = document.createElement("td");
+          const subtypeData = catData[st.id] || {};
+          const info = subtypeData[team.id];
+
+          if (!info) {
+            td.innerHTML = `<div class="empty-cell">—</div>`;
+          } else {
+            const partnerName = info.name || "Partner";
+            const link = info.url
+              ? `<a href="${info.url}" target="_blank" rel="noopener">${partnerName}</a>`
+              : partnerName;
+            const clubVal = info.club || "Undisclosed; update with internal estimate.";
+            const kpiVal = info.kpi || "Not publicly disclosed; update with internal KPIs.";
+
+            td.innerHTML = `
+              <div class="cell-partner">${link}</div>
+              <div class="cell-role">${info.role || ""}</div>
+              <div class="cell-metrics">
+                <div><span class="metric-label">Value to club:</span> ${clubVal}</div>
+                <div><span class="metric-label">Value to partner / KPIs:</span> ${kpiVal}</div>
+              </div>
+            `;
+          }
+
+          tr.appendChild(td);
+        });
+
+        tbody.appendChild(tr);
+      });
+    }
+
+    function initTables() {
+      buildTable("monetary", "monetary-header", "monetary-body");
+      buildTable("brand", "brand-header", "brand-body");
+      buildTable("activation", "activation-header", "activation-body");
+      buildTable("civic", "civic-header", "civic-body");
+    }
+
+    // Tabs wiring
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tab = btn.getAttribute("data-tab");
+        document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        document.querySelectorAll(".tab-panel").forEach(p => p.classList.remove("active"));
+        document.getElementById("panel-" + tab).classList.add("active");
+      });
+    });
+
+    // Initialize
+    initTables();
+  </script>
+</body>
+</html>
