@@ -1,0 +1,1051 @@
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>2026 Partnership Scenario Planning – Sounders & Reign</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root {
+      --bg: #030712;
+      --bg-elevated: #060b1c;
+      --accent: #22c55e; /* slightly brighter green */
+      --accent-soft: rgba(34, 197, 94, 0.18);
+      --accent-alt: #16a34a;
+      --accent-reign: #8b5cf6; /* a bit brighter purple */
+      --text-main: #f9fafb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --danger: #f97373;
+      --radius-lg: 18px;
+      --radius-pill: 999px;
+      --shadow-soft: 0 18px 45px rgba(0, 0, 0, 0.45);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "Segoe UI", sans-serif;
+      background: radial-gradient(circle at 0 0, #111827 0, #030712 50%);
+      color: var(--text-main);
+    }
+
+    h1 {
+      margin: 0 0 4px;
+      font-size: 26px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+      max-width: 1000px;
+    }
+
+    .shell {
+      border-radius: 26px;
+      background: radial-gradient(circle at top left, #111827 0, #020617 55%);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      box-shadow: var(--shadow-soft);
+      padding: 16px 16px 22px;
+    }
+
+    .tab-bar {
+      display: inline-flex;
+      padding: 4px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      margin-bottom: 16px;
+    }
+
+    .tab {
+      border: none;
+      background: transparent;
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tab span.dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4b5563;
+    }
+
+    .tab.active {
+      background: rgba(15, 23, 42, 0.98);
+      color: #e5e7eb;
+      box-shadow: 0 0 0 1px rgba(148, 163, 184, 0.6);
+    }
+
+    .tab.active span.dot.sounders {
+      background: var(--accent);
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.35);
+    }
+    .tab.active span.dot.reign {
+      background: var(--accent-reign);
+      box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.35);
+    }
+
+    .panel {
+      display: none;
+      margin-top: 8px;
+    }
+    .panel.active {
+      display: block;
+    }
+
+    .panel-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .panel-title {
+      font-size: 18px;
+      font-weight: 600;
+    }
+    .panel-kicker {
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .pill {
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      font-size: 11px;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.8);
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .pill .mini-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .layout-row {
+      display: grid;
+      grid-template-columns: minmax(1, 1.4fr) minmax(1, 1.2fr);
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    @media (max-width: 980px) {
+      .layout-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15, 23, 42, 0.95);
+      padding: 10px 10px 12px; /* reduced padding for denser layout */
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      color: #e5e7eb;
+    }
+
+    .badge.green {
+      border-color: rgba(34, 197, 94, 0.7);
+      color: #bbf7d0;
+    }
+    .badge.purple {
+      border-color: rgba(129, 140, 248, 0.7);
+      color: #e0e7ff;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    @media (max-width: 720px) {
+      .summary-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .summary-card {
+      border-radius: 14px;
+      border: 1px solid rgba(31, 41, 55, 0.9);
+      background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.05), #020617 55%);
+      padding: 8px 10px 10px;
+      font-size: 12px;
+    }
+
+    .summary-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .summary-value {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .summary-subtext {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .progress-bar {
+      width: 100%;
+      height: 6px;
+      border-radius: 999px;
+      background: rgba(31, 41, 55, 0.9);
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .progress-inner {
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(to right, #22c55e, #a3e635);
+      width: 0%;
+      transition: width 0.2s ease-out;
+    }
+
+    .progress-inner.purple {
+      background: linear-gradient(to right, #7c3aed, #f97316);
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      font-size: 11px; /* slightly denser */
+    }
+
+    th, td {
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      padding: 5px 6px; /* tighter cell padding */
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #9ca3af;
+      background: rgba(15, 23, 42, 0.9);
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .cat-name {
+      font-weight: 500;
+    }
+
+    .cat-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .num-input {
+      width: 80px;
+      padding: 3px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .num-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .metric-row {
+      display: grid;
+      grid-template-columns: 1.3fr 0.7fr;
+      gap: 6px;
+      align-items: center;
+      margin-bottom: 4px;
+      font-size: 12px;
+    }
+
+    .metric-label {
+      color: var(--text-muted);
+    }
+
+    .metric-input {
+      width: 100%;
+      padding: 4px 6px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+      font-size: 11px;
+    }
+
+    .metric-input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    .milestones {
+      margin-top: 6px;
+      font-size: 11px;
+    }
+
+    .milestones table {
+      font-size: 11px;
+    }
+
+    .milestones input[type="date"],
+    .milestones input[type="text"] {
+      width: 100%;
+      padding: 3px 5px;
+      border-radius: 6px;
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+      color: var(--text-main);
+    }
+
+    .milestones input:focus {
+      outline: none;
+      border-color: rgba(56, 189, 248, 0.9);
+      box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.9);
+    }
+
+    .examples {
+      margin-top: 6px;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .examples ul {
+      padding-left: 18px;
+      margin: 4px 0;
+    }
+
+    .examples li {
+      margin-bottom: 3px;
+    }
+
+    /* Standardized components for partner candidate sections */
+    .card-body {
+      padding: 8px 0 0;
+    }
+
+    .scroll-area {
+      max-height: 260px;
+      overflow-y: auto;
+      margin-top: 6px;
+    }
+
+    .table-wrapper {
+      margin-top: 15px;
+    }
+
+    .partner-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .partner-table th,
+    .partner-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+      vertical-align: top;
+    }
+
+    .partner-section h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    .partner-section h4 {
+      margin: 8px 0 6px;
+      font-size: 14px;
+    }
+
+    .partner-targets-nav ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 8px 0 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .partner-targets-nav a {
+      color: var(--accent-alt, #22c55e);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+    }
+  </style>
+</head>
+   <div class="layout-row">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">2026 Partner Target Map</div>
+        </div>
+        <div class="card-body">
+          <p>
+            This page summarizes priority partnership targets, why they fit the Sounders, and example
+            programs across four pillars: <strong>Core Monetary Partnerships</strong>,
+            <strong>Brand &amp; Strategic Alignments</strong>,
+            <strong>Marketing &amp; Fan-Experience Activations</strong>, and
+            <strong>Civic &amp; Community Impact</strong>.
+          </p>
+
+          <nav class="partner-targets-nav">
+            <ul>
+              <li><a href="#core-monetary-partnerships">1. Core Monetary Partnerships</a></li>
+              <li><a href="#brand-strategic-alignments">2. Brand &amp; Strategic Alignment Partnerships</a></li>
+              <li><a href="#marketing-fan-experience">3. Marketing &amp; Fan-Experience Activations</a></li>
+              <li><a href="#civic-community-impact">4. Civic &amp; Community Impact Partnerships</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    <div class="layout-row">
+        <div class="card">
+         <div class="card-body">
+            <!-- 1. CORE MONETARY PARTNERSHIPS -->
+            <section id="core-monetary-partnerships" class="partner-section">
+                <h3>1. Core Monetary Partnerships</h3>
+                <p class="section-intro">
+                Front-of-kit future cycles, sleeve/back, training kit, and major zones &amp; entitlement assets.
+                These are the most significant revenue-driving inventory positions.
+                </p>
+
+                <h4>1A. Transformational Jersey / Primary Asset Candidates</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Target Partner</th>
+                        <th>Sector / HQ</th>
+                        <th>Why It Fits the Sounders</th>
+                        <th>Example Asset / Program Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>T1</td>
+                        <td>Microsoft (incl. Copilot / Xbox)</td>
+                        <td>Tech – Redmond</td>
+                        <td>
+                        Historic shirt partner (Xbox front-of-kit 2009–2018) with deep equity on both sides; now
+                        repositioning around AI, data, and accessibility.
+                        </td>
+                        <td>
+                        <strong>“Copilot Matchday”</strong>: AI-powered match companion, accessibility features, and
+                        community STEM labs at RAVE mini-pitches.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T1</td>
+                        <td>Amazon / AWS</td>
+                        <td>Tech / Commerce – Seattle</td>
+                        <td>
+                        Global brand and Seattle icon; cloud, content, and data capabilities to amplify global
+                        reach and Club World Cup platform.
+                        </td>
+                        <td>
+                        <strong>“Sounders on Prime”</strong>: Documentary + commerce integration with AWS-powered
+                        performance and fan-insight dashboards in-stadium and in broadcast.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T1</td>
+                        <td>Costco</td>
+                        <td>Member retail co-op – Issaquah</td>
+                        <td>
+                        Member-owned, value-driven Northwest brand; co-op ethos aligns with RAVE’s community focus.
+                        </td>
+                        <td>
+                        <strong>“Member Matchdays”</strong>: Costco-member ticket bundles, youth equipment grants,
+                        and food-security programs tied to mini-pitch communities.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T2</td>
+                        <td>REI Co-op</td>
+                        <td>Outdoor retail co-op – PNW HQ in WA</td>
+                        <td>
+                        Outdoor co-op with strong climate and equity commitments; natural fit for PNW and
+                        climate storytelling.
+                        </td>
+                        <td>
+                        Climate-focused third kit, “Trail to the Match” away-day experiences, and co-branded
+                        outdoor clinics at RAVE field communities.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T2</td>
+                        <td>Nike</td>
+                        <td>Global sportswear – Beaverton, OR</td>
+                        <td>
+                        PNW sports giant; can’t touch on-field kit (MLS-wide adidas) but major upside in training
+                        wear, women &amp; girls, and grassroots.
+                        </td>
+                        <td>
+                        <strong>“Play Like a Pro”</strong> training wear and girls’ high-performance academies;
+                        climate-positive turf and footwear recycling at RAVE sites.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>T2</td>
+                        <td>Alaska Airlines / Atmos Rewards</td>
+                        <td>Airline – Seattle / SeaTac</td>
+                        <td>
+                        Deeply invested in PNW sports; strong travel and loyalty hook via Atmos Rewards.
+                        </td>
+                        <td>
+                        <strong>“Fly the Rave Green Route”</strong>: Away-day charter packages, youth team travel
+                        grants, and loyalty-point donations to RAVE.
+                        </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                    </div>
+            </section>
+        </div>
+    </div>
+           
+    
+            <!-- 2. BRAND & STRATEGIC ALIGNMENTS -->
+        <div class="layout-row">
+        <div class="card">
+         <div class="card-body">
+            <section id="brand-strategic-alignments" class="partner-section">
+                <h3>2. Brand &amp; Strategic Alignment Partnerships</h3>
+                <p class="section-intro">
+                Partners that extend the Sounders’ platform in tech &amp; data, outdoor &amp; lifestyle, and
+                financial wellness, often blending cash + in-kind value and deeper storytelling.
+                </p>
+
+                <!-- 2A. Tech, Data & Innovation -->
+                <h4>2A. Technology, Data &amp; Innovation</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Target Partner</th>
+                        <th>Rationale &amp; Fit</th>
+                        <th>Example Activation / Benefit</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Tech / Data Platform</td>
+                        <td>Tableau / Salesforce</td>
+                        <td>
+                        Visual analytics and CRM to tell the “impact story” of RAVE fields, youth mental-health
+                        programs, and fan journeys.
+                        </td>
+                        <td>
+                        <strong>“RAVE Data Hub”</strong> with live community-impact and matchday sustainability dashboards.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Tech / Productivity</td>
+                        <td>Smartsheet</td>
+                        <td>
+                        Work-management backbone for club ops, community projects, and partner reporting.
+                        </td>
+                        <td>
+                        <strong>“Smarter Season”</strong> content series plus youth internships focused on project management.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cloud / AI</td>
+                        <td>Snowflake / Databricks</td>
+                        <td>
+                        Advanced analytics &amp; AI around fan behavior, ticket yield, and player development.
+                        </td>
+                        <td>
+                        <strong>“Sounders AI Lab”</strong> hackathons with local universities and scholarships for
+                        under-represented students in data/AI.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gaming / Esports</td>
+                        <td>Nintendo of America</td>
+                        <td>
+                        Heritage PNW brand with proven appetite for local sports storytelling.
+                        </td>
+                        <td>
+                        <strong>“Sounders x Nintendo”</strong> family zones, Switch tournaments, and kid-focused
+                        matchday quests linked to STEM and creativity.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Cyber / Connectivity</td>
+                        <td>F5</td>
+                        <td>
+                        Secure app delivery to support always-on mobile fan experiences and data security.
+                        </td>
+                        <td>
+                        <strong>“Secure the Net”</strong> fan-security education plus enhanced matchday Wi-Fi and app performance.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- 2B. Lifestyle, Outdoor & Apparel -->
+                <h4>2B. Lifestyle, Outdoor &amp; Apparel</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Partner</th>
+                        <th>Rationale</th>
+                        <th>Example Activation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Outdoor / Climate</td>
+                        <td>Columbia Sportswear</td>
+                        <td>
+                        PNW weather-ready brand; perfect for rainy matchdays, away-days and climate narrative.
+                        </td>
+                        <td>
+                        <strong>“Rain Never Rests”</strong> outerwear collab + RAVE “Weather-proof Fields” fund.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Outdoor / Footwear</td>
+                        <td>Brooks Running</td>
+                        <td>
+                        High-performance running brand with strong local identity.
+                        </td>
+                        <td>
+                        Match-week <strong>“Run to Rave Green”</strong> 5Ks ending at Lumen Field and youth running clubs at RAVE sites.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Heritage Apparel</td>
+                        <td>Filson</td>
+                        <td>
+                        Iconic PNW heritage brand tied to craftsmanship and longevity.
+                        </td>
+                        <td>
+                        Limited Cascadia derby capsule collection celebrating PNW culture and history.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Food Culture</td>
+                        <td>PCC Community Markets, Ezell’s, Pagliacci / MOD Pizza</td>
+                        <td>
+                        Local, values-driven food brands aligned with youth nutrition, local sourcing, and culture.
+                        </td>
+                        <td>
+                        <strong>“Local Matchday Table”</strong> plus nutrition education in schools.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+          
+                <!-- 2C. Financial Wellness & Insurance -->
+                <h4>2C. Financial Wellness &amp; Insurance</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Partner</th>
+                        <th>Rationale</th>
+                        <th>Example Activation</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Credit Union</td>
+                        <td>BECU</td>
+                        <td>
+                        Member-owned credit union with a financial-wellness mission; strong fit for economic inclusion.
+                        </td>
+                        <td>
+                        <strong>“Goals &amp; Savings”</strong> youth accounts tied to Sounders goals and financial-literacy curriculums.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Insurance</td>
+                        <td>Symetra, Premera Blue Cross</td>
+                        <td>
+                        Regional carriers with strong community and DEI commitments.
+                        </td>
+                        <td>
+                        <strong>“Protect Our Players, Protect Our Planet”</strong> blending insurance literacy with concussion and wellness education.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Fintech</td>
+                        <td>Remitly, Tilled</td>
+                        <td>
+                        Immigrant-focused payments and fintech aligned with a global, multicultural fan base.
+                        </td>
+                        <td>
+                        Reduced-fee remittances for fans and immigrant-entrepreneurship workshops in key neighborhoods.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </section>
+        </div>
+    </div>
+           
+    <!-- 3. MARKETING & FAN-EXPERIENCE ACTIVATIONS -->
+      <div class="layout-row">
+        <div class="card">
+         <div class="card-body">
+            <section id="marketing-fan-experience" class="partner-section">
+                <h3>3. Marketing &amp; Fan-Experience Activations</h3>
+                <p class="section-intro">
+                Platforms that can be stand-alone or layered onto core partners, focused on matchday, digital content,
+                and grassroots football.
+                </p>
+
+                <!-- 3A. Matchday & In-Stadium -->
+                <h4>3A. Matchday &amp; In-Stadium</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Taxonomy / Subtype</th>
+                        <th>Target Partner(s)</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Matchday Entitlements</td>
+                        <td>Trident Seafoods, Ivar’s, Anthony’s Restaurants</td>
+                        <td>
+                        Coastal-seafood-themed concourses, “Sounder of the Sea” menu items, and kid-friendly
+                        education on sustainable fisheries.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mobility &amp; Transit</td>
+                        <td>Uber / Lyft, Amtrak Cascades</td>
+                        <td>
+                        Integrated ticket + transit offers and “Rivalry Rail” Cascadia trains for Portland/Vancouver away days.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hospitality</td>
+                        <td>Sheraton Grand Seattle, Kimpton, Inn at the Market</td>
+                        <td>
+                        <strong>“Rave Green Weekends”</strong> hotel packages bundling lodging, match tickets,
+                        and local experiences.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- 3B. Digital Content & Storytelling -->
+                <h4>3B. Digital Content &amp; Storytelling</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Subtype</th>
+                        <th>Partner</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Docu-Series / Streaming</td>
+                        <td>Amazon Studios / Prime Video</td>
+                        <td>
+                        Follow-doc on RAVE’s 26 fields and youth mental-health partnership with Providence.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Creator &amp; Youth Media</td>
+                        <td>Canva, Adobe</td>
+                        <td>
+                        Youth storytelling labs where kids produce content about their communities and mini-pitches.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Gaming &amp; Second-Screen</td>
+                        <td>Microsoft Xbox / Game Pass</td>
+                        <td>
+                        Interactive match center inside games or Game Pass, plus digital collectibles tied to on-field moments.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- 3C. Grassroots & Youth Football -->
+                <h4>3C. Grassroots &amp; Youth Football</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Subtype</th>
+                        <th>Partner</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Local Clubs &amp; Academies</td>
+                        <td>Ballard FC, Tacoma Stars, regional youth clubs</td>
+                        <td>
+                        Joint tournament series, shared coaching education, and career-pathways fairs.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Retail &amp; Equipment</td>
+                        <td>Big 5, REI, Dick’s</td>
+                        <td>
+                        <strong>“Kits for Kids”</strong> donation drives where purchases trigger donations of boots
+                        and balls to RAVE communities.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </section>
+        </div>
+    </div>
+            <!-- 4. CIVIC & COMMUNITY IMPACT -->
+        <div class="layout-row">
+        <div class="card">
+            <div class="card-body">
+            <section id="civic-community-impact" class="partner-section">
+                <h3>4. Civic &amp; Community Impact Partnerships</h3>
+                <p class="section-intro">
+                Partnerships that tie directly into the Sounders’ social-impact framework and RAVE Foundation mission:
+                centering youth and communities of color, removing barriers to play, and supporting mental health,
+                climate, and justice-oriented initiatives.
+                </p>
+
+                <!-- 4A. Health, Mental Health & Wellness -->
+                <h4>4A. Health, Mental Health &amp; Wellness</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>Role</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Seattle Children’s Hospital</td>
+                        <td>Pediatric care &amp; research</td>
+                        <td>
+                        <strong>“Kids Can Play”</strong>: Removing cost/medical barriers so youth with chronic
+                        conditions can participate in soccer.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Kaiser Permanente WA, MultiCare Health System</td>
+                        <td>Preventive health &amp; community clinics</td>
+                        <td>
+                        Expanding free health screenings and mental-health workshops at RAVE fields statewide.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Hazel Health</td>
+                        <td>Virtual mental-health support for schools</td>
+                        <td>
+                        Scaling the Renton School District mental-health model to other districts with Sounders &amp; Reign
+                        players fronting destigmatization campaigns.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                
+                <!-- 4B. Education, Youth Development & Leadership -->
+                <h4>4B. Education, Youth Development &amp; Leadership</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>Role</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                        Seattle Public Schools, Highline, Tacoma, Kent school districts
+                        </td>
+                        <td>K–12 footprint</td>
+                        <td>
+                        RAVE mini-pitches on school campuses plus curricula on leadership, equity, and climate.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        University partners beyond UW (WWU, Seattle U, WSU Vancouver)
+                        </td>
+                        <td>Higher-ed pathways</td>
+                        <td>
+                        Sounders/RAVE scholarships for first-gen students and internships in sport business and data analytics.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Code.org, Ada Developers Academy</td>
+                        <td>Tech education &amp; inclusion</td>
+                        <td>
+                        <strong>“Code the Game”</strong> camps where youth build simple stats dashboards or
+                        match-sim games tied to real Sounders data.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- 4C. Climate & Environmental Justice -->
+                <h4>4C. Climate &amp; Environmental Justice</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>Role</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Puget Sound Energy, Avista, McKinstry</td>
+                        <td>Clean energy &amp; building efficiency</td>
+                        <td>
+                        Net-zero RAVE mini-pitches with solar-powered lighting and battery storage at community fields.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Forterra, The Nature Conservancy – WA, Cascade Bicycle Club</td>
+                        <td>Land conservation &amp; sustainable mobility</td>
+                        <td>
+                        Ticket offers tied to transit, biking, and tree-planting; “1 ticket = 1 tree” and “bike-to-match”
+                        bonus rewards.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- 4D. Equity, Justice & Tribal Partnerships -->
+                <h4>4D. Equity, Justice &amp; Tribal Partnerships</h4>
+                <div class="table-wrapper">
+                <table class="partner-table">
+                    <thead>
+                    <tr>
+                        <th>Partner</th>
+                        <th>Role</th>
+                        <th>Concept</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                        Muckleshoot, Tulalip, Suquamish and other Coast Salish Tribes
+                        </td>
+                        <td>Tribal sovereignty &amp; cultural partnerships</td>
+                        <td>
+                        Expanded Salish Sea kit storytelling, cultural nights, and co-investment in fields and youth
+                        programs on tribal lands.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Black Future Co-op Fund</td>
+                        <td>Racial equity &amp; Black-led philanthropy</td>
+                        <td>
+                        Joint Sounders/Reign initiative with a business-accelerator for Black-owned small businesses
+                        activated on matchdays and in stadium retail.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                        ACLU of WA, Urban League of Metropolitan Seattle, El Centro de la Raza
+                        </td>
+                        <td>Civil-rights &amp; community organizations</td>
+                        <td>
+                        Know-your-rights and voting-access campaigns tied to the club’s “Vote” pillar with multilingual
+                        outreach using match platforms.
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+            </section>
+            </div>
+        </div>
+    </div>
+    </body>
+</html>
