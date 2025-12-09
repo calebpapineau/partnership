@@ -467,7 +467,7 @@
 
 
             <div class="welcome-card" data-navigate="ssfc-candidates">
-            <div class="card-icon"><img src="SSFC.png"  height="100" </src></div>
+            <div class="card-icon"><img src="https://images.mlssoccer.com/image/upload/assets/logos/SEA.svg"  height="100" </src></div>
             <div class="card-title">Example Partner List for 2026</div>
             <div class="card-description">
               Partner candidates by main and sub partnership taxonomy for 2026 with justifications, benefits, and activations.
@@ -580,6 +580,19 @@
           <iframe id="planning-iframe" title="2026 Partnership Planning Board"></iframe>
         </div>
       </div>
+
+       <!-- SSFC Candidates -->
+      <div id="candidate-board" class="view">
+        <div class="view-header">
+          <div class="view-title">2026 Seattle Sounders Partner Candidates</div>
+          <div class="view-description">
+            Partnership candidates by main and subtype with justifications.
+          </div>
+        </div>
+        <div class="iframe-container">
+          <iframe id="candidate-iframe" title="2026 Seattle Sounder Partner Candidates"></iframe>
+        </div>
+      </div>
     </div>
 
     <!-- FOOTER -->
@@ -606,7 +619,8 @@
       "nwsl-matrix": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
       "scenario-sounders-reign": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
       "deal-design": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
-      "planning-board": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`
+      "planning-board": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`,
+      "candidate-board": `<!DOCTYPE html><html><head><meta charset="UTF-8"/></head><body style="margin:0;padding:0;background:#050814;color:#f5f7ff;font-family:system-ui,sans-serif;"><div style="padding:20px;max-width:1400px;margin:0 auto;"></div></body></html>`
     };
 
     function switchView(viewId) {
@@ -651,7 +665,8 @@
         "nwsl-iframe": "NWSL Partnership Strategy Matrix",
         "scenario-iframe": "2026 Scenario Planning Tool",
         "deal-iframe": "Deal Design Matrix",
-        "planning-iframe": "2026 Planning Board"
+        "planning-iframe": "2026 Planning Board",
+        "candidate-iframe": "2026 Partner Candidates"        
       };
 
       // Instead of inlining large HTML blobs (which requires heavy escaping),
@@ -662,7 +677,8 @@
         "nwsl-iframe": "NWSL - Partner Programs v4.html",
         "scenario-iframe": "Partnership Scenario Planning Tool.html",
         "deal-iframe": "SFC SRFC Partnership Planning and Checklist 2026.html",
-        "planning-iframe": "SFC SRFC Partner Targets 2026.html"
+        "planning-iframe": "SFC SRFC Partner Targets 2026.html",
+        "candidate-iframe": "partnercandidates.html"        
       };
 
       Object.entries(toolFiles).forEach(([id, filename]) => {
